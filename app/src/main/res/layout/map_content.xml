@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <android.support.design.widget.AppBarLayout
+            android:background="@color/colorPrimary"
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="73dp">
+
+            <android.support.v7.widget.CardView
+                app:cardCornerRadius="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize">
+                <LinearLayout
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/left_navi"
+                        android:src="@drawable/left_navi"
+                        android:layout_width="20dp"
+                        android:layout_height="40dp" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo_search"
+                        app:civ_border_width="1dp"
+                        app:civ_border_color="@color/colorGray"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="12dp"
+                        android:fitsSystemWindows="true"
+                        android:clipToPadding="true"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/default_photo"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp" />
+                    <LinearLayout
+                        android:layout_marginRight="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:gravity="center_vertical"
+                            android:id="@+id/search"
+                            android:layout_weight="1"
+                            android:textSize="18sp"
+                            android:hint="@string/search"
+                            android:fitsSystemWindows="true"
+                            android:clipToPadding="true"
+                            android:background="@null"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                        <ImageView
+                            android:id="@+id/location"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/my_position"
+                            android:layout_width="24dp"
+                            android:layout_height="34dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </android.support.design.widget.AppBarLayout>
+        <com.amap.api.maps.MapView
+            android:layout_marginTop="73dp"
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.amap.api.maps.MapView>
+        <!-- TODO: Update blank fragment layout -->
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/cl"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="116dp">
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="116dp"
+                app:layout_behavior="@string/bottom_sheet_behavior"
+                >
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:visibility="gone"
+                        android:id="@+id/sheet3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_navi3"
+                            app:backgroundTint="@color/colorAccent2"
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentRight="true"
+                            app:srcCompat="@drawable/right" />
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/show_part3"
+                            android:layout_marginTop="24dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="92dp">
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:text="大约1小时40分钟"
+                                    android:textColor="@android:color/black"
+                                    android:id="@+id/position_detail3"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="24sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:text="2.5公里"
+                                    android:layout_below="@id/position_detail3"
+                                    android:id="@+id/current_position3"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="14sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/test"
+                                    android:textSize="16sp"
+                                    android:layout_marginTop="52dp"
+                                    android:layout_marginRight="13dp"
+                                    android:layout_alignParentRight="true"
+                                    android:textColor="@color/colorPrimary"
+                                    android:text="@string/startNavi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:id="@+id/sheet1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_navi"
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentRight="true"
+                            app:srcCompat="@drawable/logo_white" />
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/show_part"
+                            android:layout_marginTop="24dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="92dp">
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:textColor="@android:color/black"
+                                    android:id="@+id/position_detail"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="24sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_below="@id/position_detail"
+                                    android:id="@+id/current_position"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="14sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:textSize="16sp"
+                                    android:layout_marginTop="52dp"
+                                    android:layout_marginRight="28dp"
+                                    android:layout_alignParentRight="true"
+                                    android:textColor="@color/colorPrimary"
+                                    android:text="@string/start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </RelativeLayout>
+
+
+                        </android.support.v7.widget.CardView>
+
+                        <!-- NestedScrollView里设置你的底部表长什么样的-->
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:visibility="gone"
+                        android:id="@+id/sheet2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_navi2"
+                            app:backgroundTint="@color/colorAccent3"
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentRight="true"
+                            app:srcCompat="@drawable/navi" />
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/show_part2"
+                            android:layout_marginTop="24dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="92dp">
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:textColor="@android:color/black"
+                                    android:id="@+id/position_detail2"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="24sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_below="@id/position_detail2"
+                                    android:id="@+id/current_position2"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="14sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:textSize="16sp"
+                                    android:layout_marginTop="52dp"
+                                    android:layout_marginRight="28dp"
+                                    android:layout_alignParentRight="true"
+                                    android:textColor="@color/colorPrimary"
+                                    android:text="@string/rout"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
