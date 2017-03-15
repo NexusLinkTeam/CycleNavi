@@ -3,6 +3,7 @@ package com.nexuslink.cyclenavi.View.Impl.Activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.amap.api.navi.AMapHudView;
 import com.amap.api.navi.AMapHudViewListener;
@@ -28,16 +29,31 @@ import com.nexuslink.cyclenavi.R;
 public class NaviActivity extends AppCompatActivity implements  AMapNaviListener, AMapHudViewListener {
     private AMapHudView aMapNaviView;
     private AMapNavi mAMapNavi;
+    private TextView nowSpped, averSpeed,kcal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navi);
-        mAMapNavi = AMapNavi.getInstance(getApplicationContext());
-        mAMapNavi.addAMapNaviListener(this);
 
+        initView();
+        initData();
+    }
+
+    private void initData() {
+
+    }
+
+    private void initView() {
+        mAMapNavi = AMapNavi.getInstance(getApplicationContext());
         aMapNaviView = (AMapHudView) findViewById(R.id.amap_navi);
+        nowSpped = (TextView) findViewById(R.id.text_now_speed);
+        averSpeed = (TextView) findViewById(R.id.text_aver_speed);
+        kcal = (TextView) findViewById(R.id.text_kcal);
+
+        mAMapNavi.addAMapNaviListener(this);
         aMapNaviView.setHudMenuEnabled(false);
         aMapNaviView.setHudViewListener(this);
+        mAMapNavi.setBroadcastMode(MODE_APPEND);
     }
 
     @Override
@@ -68,6 +84,12 @@ public class NaviActivity extends AppCompatActivity implements  AMapNaviListener
         mAMapNavi.calculateRideRoute(new NaviLatLng(getIntent().getDoubleExtra("START_LATITUDE",0)
         ,getIntent().getDoubleExtra("START_LONGITUDE",0)),new NaviLatLng(getIntent().getDoubleExtra("END_LATITUDE",0),
                 getIntent().getDoubleExtra("END_LONGITUDE",0)));
+        Log.d("TAG",getIntent().getDoubleExtra("START_LATITUDE",0) + ""+
+                getIntent().getDoubleExtra("START_LONGITUDE",0)+""+
+                getIntent().getDoubleExtra("END_LATITUDE",0)+
+        getIntent().getDoubleExtra("END_LONGITUDE",0));
+        mAMapNavi.startNavi(NaviType.GPS);
+
     }
 
     @Override
@@ -82,6 +104,8 @@ public class NaviActivity extends AppCompatActivity implements  AMapNaviListener
 
     @Override
     public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+        Float speed  = aMapNaviLocation.getSpeed();
+        Log.d("TAG123",speed +"速度");
     }
 
     @Override
@@ -106,12 +130,15 @@ public class NaviActivity extends AppCompatActivity implements  AMapNaviListener
 
     @Override
     public void onArriveDestination(AMapNaviStaticInfo aMapNaviStaticInfo) {
-
     }
 
     //算路成功回调，开始导航
     @Override
     public void onCalculateRouteSuccess() {
+        mAMapNavi.startGPS();
+        mAMapNavi.setIsUseExtraGPSData(true);
+
+        Log.d("TAG123",mAMapNavi.isGpsReady()+"");
         mAMapNavi.startNavi(NaviType.EMULATOR);
     }
 
@@ -171,7 +198,6 @@ public class NaviActivity extends AppCompatActivity implements  AMapNaviListener
 
     @Override
     public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
-
     }
 
     @Override
@@ -191,12 +217,10 @@ public class NaviActivity extends AppCompatActivity implements  AMapNaviListener
 
     @Override
     public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
-
     }
 
     @Override
     public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
-
     }
 
     @Override

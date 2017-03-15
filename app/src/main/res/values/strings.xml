@@ -53,4 +53,5 @@
     <string name="rout">路线</string>
     <string name="startNavi">开始导航</string>
     <string name="conform">确认要退出吗？</string>
+    <string name="title_activity_first">FirstActivity</string>
 </resources>

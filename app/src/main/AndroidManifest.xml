@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nexuslink.cyclenavi">
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     //高德地图权限
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -73,12 +75,6 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".View.Impl.Activities.MainActivity$ToastBroadCast">
-            <intent-filter>
-                <action android:name="cyclenavi.ToastReceiver" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".View.Impl.Activities.SearchActivity"
             android:theme="@style/AppThemeNoActionBar" />
@@ -101,7 +97,8 @@
         <activity
             android:name=".View.Impl.Activities.LookUpActivity"
             android:theme="@style/NaviBlackTheme" />
-        <activity android:name=".View.Impl.Activities.CommentActivity"></activity>
+        <activity android:name=".View.Impl.Activities.CommentActivity" />
+        <activity android:name=".View.Impl.Activities.MapActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,22 +10,34 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +62,7 @@ import com.amap.api.services.route.RidePath;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.Presenter.Impl.MainPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.IMainPresenter;
 import com.nexuslink.cyclenavi.R;
@@ -57,11 +71,15 @@ import com.nexuslink.cyclenavi.Tools.Constant;
 import com.nexuslink.cyclenavi.Tools.RideRouteOverlay;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
 
+import java.io.File;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+/*
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,IMainView, LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener, View.OnClickListener {
     private IMainPresenter iMainPresenter;
@@ -502,6 +520,277 @@ public class MainActivity extends AppCompatActivity
 
     public DrawerLayout getDrawer() {
         return drawer;
+    }
+
+}
+*/
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    private TextView text;
+    private Chronometer timer;
+    private RelativeLayout btnPlay;
+    private RelativeLayout btnPause;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        CircleImageView circleImageView = (CircleImageView)headerView.findViewById(R.id.person_image);
+        RelativeLayout btnMap = (RelativeLayout) findViewById(R.id.btn_map);
+        RelativeLayout btnTakePhoto = (RelativeLayout) findViewById(R.id.btn_take_photo);
+        btnPlay = (RelativeLayout) findViewById(R.id.play);
+        btnPause = (RelativeLayout) findViewById(R.id.pause);
+
+        DashboardView panView = (DashboardView) findViewById(R.id.panView);
+        timer = (Chronometer) findViewById(R.id.timer);
+        text = (TextView) headerView.findViewById(R.id.name);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        initPan(panView);
+        initSensor();
+        btnPause.setOnClickListener(this);
+        btnPlay.setOnClickListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
+        circleImageView.setOnClickListener(this);
+        btnMap.setOnClickListener(this);
+        btnTakePhoto.setOnClickListener(this);
+        text.setText(getSharedPreferences(Constant.spDataName,MODE_PRIVATE).getString("name",getString(R.string.without_login)));
+    }
+
+    private void initSensor() {
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+    }
+
+    private void initPan(DashboardView panView) {
+        panView.setPercent(100);
+        panView.setTextSize(25);
+        panView.setUnit("公里/小时");
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.msg:
+                Intent intent1 = new Intent(MainActivity.this, MsgActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.favorite:
+                Intent intent2 = new Intent(MainActivity.this, FavouriteActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.forum:
+                Intent intent3 = new Intent(MainActivity.this, ForumActivity.class);
+                startActivity(intent3);
+                break;
+            case R.id.about:
+                Intent intent4 = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent4);
+                break;
+            case R.id.exist:
+                new AlertDialog.Builder(this).
+                        setTitle(R.string.exist).
+                        setMessage(R.string.conform).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).setNegativeButton(R.string.no, null).show();
+        }
+        return true;
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.person_image:
+                Boolean isLogin = getSharedPreferences("CycleNaviData",MODE_PRIVATE).getBoolean("isUserLogin",false);
+
+                if(isLogin){
+                    Intent intent = new Intent(MainActivity.this,PersonalActivity.class);
+                    startActivityForResult(intent,1);
+                }else {
+                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    startActivityForResult(intent,0);
+                }
+                break;
+
+            case R.id.btn_map:
+                Intent intent = new Intent(MainActivity.this,MapActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_take_photo:
+                //拍摄照片
+                break;
+            case R.id.play:
+                btnPlay.setVisibility(View.GONE);
+                btnPause.setVisibility(View.VISIBLE);
+                /*timer.setBase(SystemClock.elapsedRealtime());//计时器清零*/
+                timer.setBase(convertStrTimeToLong(timer.getText().toString()));
+                timer.start();//开始计时
+                break;
+            case R.id.pause:
+                new AlertDialog.Builder(this).setTitle("提示").setMessage("选择你的操作")
+                        .setPositiveButton("完成", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            //完成的逻辑
+                            }
+                        }).setNegativeButton("休息一会儿", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        btnPlay.setVisibility(View.VISIBLE);
+                        btnPause.setVisibility(View.GONE);
+                        timer.stop();
+                    }
+                }).show();
+
+                break;
+
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            text.setText(getSharedPreferences("CycleNaviData", MODE_PRIVATE).getString("name", getString(R.string.without_login)));
+            /*if(requestCode == 3){
+                //防止与底部bottomsheet逻辑发生错乱
+                aMap.clear();
+                if(sheet2.getVisibility() == View.VISIBLE){
+                    sheet2.setVisibility(View.GONE);
+                    sheet1.setVisibility(View.VISIBLE);
+                }else if (sheet3.getVisibility()== View.VISIBLE){
+                    sheet3.setVisibility(View.GONE);
+                    sheet2.setVisibility(View.VISIBLE);
+                }
+
+                search.setText(data.getStringExtra("DES"));
+                setBottomSheetText(data.getStringExtra("DETAIL"),data.getStringExtra("AROUND"));
+                aMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(data.getDoubleExtra("POINT_LATITUDE",0),data.getDoubleExtra("POINT_LONGITUDE",0)))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.amap_end)));
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(data.getDoubleExtra("POINT_LATITUDE",0),data.getDoubleExtra("POINT_LONGITUDE",0)), 10));
+                latLonPoint = new LatLonPoint(data.getDoubleExtra("POINT_LATITUDE",0),data.getDoubleExtra("POINT_LONGITUDE",0));
+                sheet1.setVisibility(View.GONE);
+                sheet2.setVisibility(View.VISIBLE);
+                positionDetail2.setText(data.getStringExtra("DETAIL"));
+                currentPosition2.setText(data.getStringExtra("AROUND"));
+            }*/
+        }
+    }
+   /* private void checkPremission() {
+        final String permission = Manifest.permission.CAMERA;  //相机权限
+        final String permission1 = Manifest.permission.WRITE_EXTERNAL_STORAGE; //写入数据权限
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, permission1) != PackageManager.PERMISSION_GRANTED) {  //先判断是否被赋予权限，没有则申请权限
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {  //给出权限申请说明
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, CAMERA_REQUEST_CODE);
+            } else { //直接申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE); //申请权限，可同时申请多个权限，并根据用户是否赋予权限进行判断
+            }
+        } else {  //赋予过权限，则直接调用相机拍照
+            openCamera();
+        }
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {  //申请权限的返回值
+            case CAMERA_REQUEST_CODE:
+                int length = grantResults.length;
+                final boolean isGranted = length >= 1 && PackageManager.PERMISSION_GRANTED == grantResults[length - 1];
+                if (isGranted) {  //如果用户赋予权限，则调用相机
+                    openCamera();
+                }else{ //未赋予权限，则做出对应提示
+
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    private void openCamera() {  //调用相机拍照
+        Intent intent = new Intent();
+        File file = new FileStorage().createIconFile();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+            imageUri = FileProvider.getUriForFile(this, "com.ddz.demo", file);//通过FileProvider创建一个content类型的Uri，进行封装
+        } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
+            try {
+                imageUri = Uri.fromFile(ImageUtils.createFile(FileUtils.getInst().getPhotoPathForLockWallPaper(), true));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
+        startActivityForResult(intent, REQUEST_CAPTURE);//启动拍照
+    }*/
+
+    protected long convertStrTimeToLong(String strTime) {
+        // TODO Auto-generated method stub
+        String []timeArry=strTime.split(":");
+        long longTime=0;
+        if (timeArry.length==2) {//如果时间是MM:SS格式
+            longTime=Integer.parseInt(timeArry[0])*1000*60+Integer.parseInt(timeArry[1])*1000;
+        }else if (timeArry.length==3){//如果时间是HH:MM:SS格式
+            longTime=Integer.parseInt(timeArry[0])*1000*60*60+Integer.parseInt(timeArry[1])
+                    *1000*60+Integer.parseInt(timeArry[0])*1000;
+        }
+        return SystemClock.elapsedRealtime()-longTime;
     }
 
 }

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="DashboardView-1.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/57317aecadcf4fad19e41fa99b79784155b47eca/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/57317aecadcf4fad19e41fa99b79784155b47eca/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.SuperKung/DashboardView/1.2.1/73b138550ac7106bd6e28a9ab3a9d4e95fa7983e/DashboardView-1.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
