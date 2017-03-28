@@ -28,6 +28,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /**
+ * 后台提供的接口
  * Created by Rye on 2017/1/21.
  */
 
@@ -86,11 +87,6 @@ public interface ICycleNaviService {
     Call<GetMoreHitsBean> getHisMore(@Field("userId") String userId,
                                      @Field("writerId") String writerId,
                                      @Field("lastArticleId") String lastArticleId );
-    //有疑问
-   /* {
-        "code": 200,
-            "articles": []
-    }*/
 
     @FormUrlEncoded
     @POST("/cycle/api/article/like")
@@ -111,5 +107,4 @@ public interface ICycleNaviService {
     @POST("/cycle/api/article/getMoreComments")
     Call<GetMoreComments> getMoreComments (@Field("userId") String userId,
                                            @Field("lastCommentFloor") String lastCommentFloor  );
-
 }

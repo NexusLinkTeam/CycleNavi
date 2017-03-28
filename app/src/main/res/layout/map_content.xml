@@ -264,15 +264,21 @@
                     android:background="?attr/colorPrimary"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
-        <android.support.v7.widget.CardView
+        <com.nexuslink.cyclenavi.Tools.MyViewPager
+            android:id="@+id/viewpager_main"
+            android:layout_below="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.nexuslink.cyclenavi.Tools.MyViewPager>
+        <!--<android.support.v7.widget.CardView
             android:id="@+id/card1"
             android:layout_below="@+id/app_bar"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="88dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -280,8 +286,8 @@
                         <com.anderson.dashboardview.view.DashboardView
                             android:layout_margin = "16dp"
                             android:layout_centerInParent="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
                             android:id="@+id/panView"
                             android:text="当前速度"
                             app:startNumber="0"
@@ -291,7 +297,7 @@
                             app:maxNumber = "40"
 
                             />
-                            <!--app:maxNumber
+                            &lt;!&ndash;app:maxNumber
                             app:backgroundColor
                             app:progressColor
                             app:startProgressColor
@@ -302,10 +308,10 @@
                             app:tikeStrSize
                             app:startNumber
                             app:maxNumber
-                            app:centerCircleColor-->
+                            app:centerCircleColor&ndash;&gt;
 
                         //修改版本1
-                        <!--<TextView
+                        &lt;!&ndash;<TextView
                             android:textSize="18dp"
                             android:layout_marginLeft="16dp"
                             android:gravity=""
@@ -319,10 +325,13 @@
                             android:textSize="36sp"
                             android:text="10km/h"
                             android:layout_width="match_parent"
-                            android:layout_height="80dp" />-->
+                            android:layout_height="80dp" />&ndash;&gt;
                 </RelativeLayout>
         </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
+
+
+        //数据
+        &lt;!&ndash;<android.support.v7.widget.CardView
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_below="@id/card1"
@@ -461,7 +470,7 @@
                         </LinearLayout>
 
                 </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>&ndash;&gt;
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -537,7 +546,7 @@
                         </RelativeLayout>
                 </android.support.v7.widget.CardView>
         </LinearLayout>
-
+-->
 
 
 </RelativeLayout>

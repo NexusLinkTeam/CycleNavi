@@ -1,0 +1,177 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nexuslink.cyclenavi.View.Impl.Fragments.InfoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.CardView
+        android:id="@+id/map_card"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+        <com.amap.api.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.amap.api.maps.MapView>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:alpha="0.9"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:padding="5dp"
+            android:id="@+id/location"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/my_position"
+            android:layout_width="35dp"
+            android:layout_height="35dp" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_below="@id/map_card"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <ImageView
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/time"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+
+                    <Chronometer
+                        android:id="@+id/timer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <ImageView
+
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/aver_speed"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/angel" />
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <ImageView
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/way"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <ImageView
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/kcal"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <ImageView
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/mountain"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
