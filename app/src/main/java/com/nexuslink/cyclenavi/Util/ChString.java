@@ -1,4 +1,4 @@
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 public class ChString {
 	public static final String Kilometer = "\u516c\u91cc";// "公里";

@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -24,12 +22,8 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
-import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.Constant;
-import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

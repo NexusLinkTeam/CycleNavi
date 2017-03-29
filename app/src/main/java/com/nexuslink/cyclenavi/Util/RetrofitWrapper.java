@@ -1,4 +1,4 @@
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;

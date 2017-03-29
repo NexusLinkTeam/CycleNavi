@@ -19,19 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class DataActivity extends AppCompatActivity implements SensorEventListener{
+public class DataActivity extends AppCompatActivity{
 
     @BindView(R.id.viewpager_data)
     ViewPager dataPager;
-    private SensorManager sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
+        ButterKnife.bind(this);
         initView();
-        initData();
     }
 
     private void initView() {
@@ -41,34 +41,13 @@ public class DataActivity extends AppCompatActivity implements SensorEventListen
                 fragments));
     }
 
-    private void initData() {
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE),
-                SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sensorManager.unregisterListener(this);
     }
 }

@@ -1,4 +1,4 @@
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 /**
  * Created by Rye on 2017/2/21.

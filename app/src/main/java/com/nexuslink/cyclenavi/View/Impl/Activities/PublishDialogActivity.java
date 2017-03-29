@@ -16,17 +16,14 @@ import android.widget.Toast;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.view.CropImageView;
 import com.nexuslink.cyclenavi.Adapters.PhotosPrepareAdapter;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.ArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
-import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.FileManager;
-import com.nexuslink.cyclenavi.Tools.FreshEvent;
-import com.nexuslink.cyclenavi.Tools.GlideImageLoader;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.FreshEvent;
+import com.nexuslink.cyclenavi.Util.GlideImageLoader;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,7 +37,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
 public class PublishDialogActivity extends AppCompatActivity {

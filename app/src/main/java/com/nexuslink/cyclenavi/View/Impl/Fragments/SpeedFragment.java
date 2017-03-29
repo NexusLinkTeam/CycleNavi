@@ -2,9 +2,7 @@ package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anderson.dashboardview.view.DashboardView;
-import com.nexuslink.cyclenavi.BasePresenter;
-import com.nexuslink.cyclenavi.BaseView;
 import com.nexuslink.cyclenavi.Presenter.Impl.SpeedPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.IntentUtil;
-import com.nexuslink.cyclenavi.Tools.TimeUtil;
+import com.nexuslink.cyclenavi.Util.IntentUtil;
+import com.nexuslink.cyclenavi.Util.TimeUtil;
 import com.nexuslink.cyclenavi.View.Impl.Activities.DataActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 import com.nexuslink.cyclenavi.View.Interface.ISpeedView;

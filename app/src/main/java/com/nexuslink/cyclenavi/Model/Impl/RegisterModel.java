@@ -1,7 +1,6 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -9,7 +8,7 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.Interface.IRegisterModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.RegisterBean;
 import com.nexuslink.cyclenavi.Presenter.Impl.RegisterPresenterImpl;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.View.Interface.IRegisterView;
 
 import retrofit2.Call;

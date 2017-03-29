@@ -1,4 +1,4 @@
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 import android.content.Context;
 import android.content.CursorLoader;

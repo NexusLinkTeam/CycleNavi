@@ -7,10 +7,9 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.Interface.IPersonalModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.FileManager;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.FileManager;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.View.Impl.Activities.PersonalActivity;
-import com.nexuslink.cyclenavi.View.Interface.IPersonalView;
 
 import java.io.File;
 

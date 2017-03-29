@@ -5,23 +5,20 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Adapters.RecycleTopicsAdapter;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.FreshEvent;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.FreshEvent;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

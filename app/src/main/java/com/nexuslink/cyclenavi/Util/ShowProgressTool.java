@@ -1,8 +1,7 @@
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 
 /**
  * Created by Rye on 2017/1/22.

@@ -2,25 +2,21 @@ package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.SaveNameBean;
 import com.nexuslink.cyclenavi.Presenter.Impl.RegisterPresenterImpl;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
-import com.nexuslink.cyclenavi.Tools.ShowProgressTool;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.ShowProgressTool;
 import com.nexuslink.cyclenavi.View.Interface.IRegisterView;
 
 import retrofit2.Call;

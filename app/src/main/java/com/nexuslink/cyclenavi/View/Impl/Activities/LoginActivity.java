@@ -7,17 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,10 +27,7 @@ import android.widget.Toast;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 
 
 import retrofit2.Call;

@@ -1,35 +1,18 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.app.AlertDialog;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nexuslink.cyclenavi.Api.ICycleNaviService;
-import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
 import com.nexuslink.cyclenavi.Presenter.Impl.PersonalPresenterImpl;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.FileManager;
-import com.nexuslink.cyclenavi.Tools.RetrofitWrapper;
 import com.nexuslink.cyclenavi.View.Interface.IPersonalView;
-
-import java.io.File;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class PersonalActivity extends AppCompatActivity implements View.OnClickListener,IPersonalView {

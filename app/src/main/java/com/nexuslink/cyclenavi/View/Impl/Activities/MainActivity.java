@@ -1,96 +1,40 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Chronometer;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.Text;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.route.BusRouteResult;
-import com.amap.api.services.route.DriveRouteResult;
-import com.amap.api.services.route.RidePath;
-import com.amap.api.services.route.RideRouteResult;
-import com.amap.api.services.route.RouteSearch;
-import com.amap.api.services.route.WalkRouteResult;
-import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.Adapters.MainFragmentStatePagerAdapter;
 import com.nexuslink.cyclenavi.Presenter.Impl.MainPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.IMainPresenter;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Tools.AMapUtil;
-import com.nexuslink.cyclenavi.Tools.Constant;
-import com.nexuslink.cyclenavi.Tools.IntentUtil;
-import com.nexuslink.cyclenavi.Tools.MyViewPager;
-import com.nexuslink.cyclenavi.Tools.RideRouteOverlay;
+import com.nexuslink.cyclenavi.Util.Constant;
+import com.nexuslink.cyclenavi.Util.IntentUtil;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.InfoFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.SpeedFragment;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /*
 public class MainActivity extends AppCompatActivity
@@ -597,7 +541,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initData() {
-        presenter = new MainPresenterImpl(this);
+        new MainPresenterImpl(this);
         toolbar.setTitle(R.string.app_name);
 
     }

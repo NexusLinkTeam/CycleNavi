@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.nexuslink.cyclenavi.Tools;
+package com.nexuslink.cyclenavi.Util;
 
 import android.text.Html;
 import android.text.Spanned;
