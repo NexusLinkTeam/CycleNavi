@@ -29,6 +29,7 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Tools.Constant;
+import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +188,8 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
         //一直发请求
         this.aMapLocation = aMapLocation;
 
+       SpeedFragment speedFragment = (SpeedFragment) getFragmentManager().getFragments().get(0);
+        speedFragment.setCurrentPosition(aMapLocation.getAoiName());
         if(locationChangedListener != null){
             double longitude = aMapLocation.getLongitude();//经度
             double altitude = aMapLocation.getAltitude();//高度
@@ -195,7 +198,6 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             Log.d("TAG4",lastLongitude+"last");
 
             double speed = getDistance(latitude,longitude,lastLatitude,lastLongitude)/2 * 60 *60;
-            Toast.makeText(getContext(),speed+"speed",Toast.LENGTH_SHORT).show();
             Log.d("TAG4",speed+"shudu");
             lastLongitude = longitude;//经度
             lastAltitude = altitude;//高度

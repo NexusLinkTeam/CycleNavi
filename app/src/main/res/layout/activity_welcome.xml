@@ -6,7 +6,7 @@
     >
     <ImageView
         android:scaleType="centerCrop"
-        android:background="@drawable/wallpaper"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
@@ -68,7 +68,7 @@
 
     <TextView
         android:textSize="12sp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="68dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:textColor="@android:color/white"

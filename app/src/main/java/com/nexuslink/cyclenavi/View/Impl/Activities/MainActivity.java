@@ -541,9 +541,6 @@ public class MainActivity extends AppCompatActivity
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView{
 
-
-    /*private Chronometer timer;*/
-
     private IMainPresenter presenter;
 
     private TextView text;
@@ -557,10 +554,6 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-   /* @BindView(R.id.play)
-    RelativeLayout btnPlay;
-    @BindView(R.id.pause)
-    RelativeLayout btnPause;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -606,6 +599,7 @@ public class MainActivity extends AppCompatActivity
     private void initData() {
         presenter = new MainPresenterImpl(this);
         toolbar.setTitle(R.string.app_name);
+
     }
 
     @Override
@@ -662,32 +656,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.person_image:
                 presenter.moreUserInfo(this);
                 break;
-
-
-            /*case R.id.play:
-                btnPlay.setVisibility(View.GONE);
-                btnPause.setVisibility(View.VISIBLE);
-                *//*timer.setBase(SystemClock.elapsedRealtime());//计时器清零*//**//*
-                timer.setBase(convertStrTimeToLong(timer.getText().toString()));
-                timer.start();//开始计时*//*
-                break;
-            case R.id.pause:
-                new AlertDialog.Builder(this).setTitle("提示").setMessage("选择你的操作")
-                        .setPositiveButton("完成", new DialogInterface.OnClickListener() {
-                            /*@Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            //完成的逻辑
-                            }
-                        }).setNegativeButton("休息一会儿", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        btnPlay.setVisibility(View.VISIBLE);
-                        btnPause.setVisibility(View.GONE);*/
-                       //* timer.stop();*//*
-                 /*   }
-                }).show();*/
-              /*  break;*/
-
         }
     }
     @Override
@@ -696,19 +664,6 @@ public class MainActivity extends AppCompatActivity
         if (resultCode == RESULT_OK) {
             presenter.finishLogin();
         }
-    }
-
-    protected long convertStrTimeToLong(String strTime) {
-        // TODO Auto-generated method stub
-        String []timeArry=strTime.split(":");
-        long longTime=0;
-        if (timeArry.length==2) {//如果时间是MM:SS格式
-            longTime=Integer.parseInt(timeArry[0])*1000*60+Integer.parseInt(timeArry[1])*1000;
-        }else if (timeArry.length==3){//如果时间是HH:MM:SS格式
-            longTime=Integer.parseInt(timeArry[0])*1000*60*60+Integer.parseInt(timeArry[1])
-                    *1000*60+Integer.parseInt(timeArry[0])*1000;
-        }
-        return SystemClock.elapsedRealtime()-longTime;
     }
 
     /**
@@ -769,4 +724,9 @@ public class MainActivity extends AppCompatActivity
     public void showUserPhoto(Drawable personalImage) {
 
     }
+
+    public void showPage(int position){
+        mainPager.setCurrentItem(position);
+    }
+
 }

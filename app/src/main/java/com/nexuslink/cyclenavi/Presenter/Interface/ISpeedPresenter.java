@@ -7,4 +7,9 @@ import com.nexuslink.cyclenavi.BasePresenter;
  */
 
 public interface ISpeedPresenter extends BasePresenter{
+    void startCycle();
+
+    void pauseCycle();
+
+    void switchFragment();
 }

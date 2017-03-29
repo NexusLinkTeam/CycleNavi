@@ -24,4 +24,19 @@ public class SpeedPresenterImpl implements ISpeedPresenter {
         speedModel.currentSpeed();
         speedView.showCurrentSpeed(persent);
     }
+
+    @Override
+    public void startCycle() {
+        speedView.showStart();
+    }
+
+    @Override
+    public void pauseCycle() {
+        speedView.showPause();
+    }
+
+    @Override
+    public void switchFragment() {
+        speedView.showPage2();
+    }
 }

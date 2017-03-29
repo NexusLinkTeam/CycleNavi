@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.BasePresenter;
@@ -16,6 +19,10 @@ import com.nexuslink.cyclenavi.BaseView;
 import com.nexuslink.cyclenavi.Presenter.Impl.SpeedPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.Tools.IntentUtil;
+import com.nexuslink.cyclenavi.Tools.TimeUtil;
+import com.nexuslink.cyclenavi.View.Impl.Activities.DataActivity;
+import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 import com.nexuslink.cyclenavi.View.Interface.ISpeedView;
 
 import butterknife.BindView;
@@ -36,36 +43,21 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     RelativeLayout btnPlay;
     @BindView(R.id.pause)
     RelativeLayout btnPause;
+    @BindView(R.id.timer)
+    Chronometer textTimer;
+    @BindView(R.id.position)
+    TextView position;
 
     @OnClick(R.id.play) void play(){
-        btnPlay.setVisibility(View.GONE);
-        btnPause.setVisibility(View.VISIBLE);
-        /*timer.setBase(SystemClock.elapsedRealtime());//计时器清零*//*
-                timer.setBase(convertStrTimeToLong(timer.getText().toString()));
-                timer.start();//开始计时*/
+        presenter.startCycle();
     }
 
     @OnClick(R.id.pause) void pause(){
-        btnPlay.setVisibility(View.GONE);
-        btnPause.setVisibility(View.VISIBLE);
-        /*new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("选择你的操作")
-                        .setPositiveButton("完成", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //完成的逻辑
-                            }
-                        }).setNegativeButton("休息一会儿", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        btnPlay.setVisibility(View.VISIBLE);
-                        btnPause.setVisibility(View.GONE);
-                        timer.stop();
-                    }
-                }).show();*/
+        presenter.pauseCycle();
     }
 
     @OnClick(R.id.btn_map) void map(){
-
+        IntentUtil.startActivity(getActivity(),DataActivity.class);
     }
 
     @OnClick(R.id.btn_take_photo) void takePhoto(){
@@ -82,6 +74,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     }
 
     private void initData() {
+        textTimer.setTag(1);
         panView.setTextSize(35);
         panView.setUnit("公里/小时");
         presenter = new SpeedPresenterImpl(this);
@@ -95,5 +88,74 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     @Override
     public void showCurrentSpeed(int persent) {
         panView.setPercent(persent);
+    }
+
+    @Override
+    public void showPause() {
+        startVisible(true);
+        new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("选择你的操作")
+                .setPositiveButton("完成", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //完成的逻辑
+
+                    }
+                }).setNegativeButton("休息一会儿", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startVisible(false);
+                textTimer.setTag(0);
+                textTimer.stop();
+            }
+        }).show();
+    }
+
+    @Override
+    public void showStart() {
+        startVisible(true);
+        if(textTimer.getTag().equals(0)){
+            new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("要继续开始吗？")
+                    .setPositiveButton("是的", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            timeStart();
+                        }
+                    }).setNegativeButton("再休息一会儿", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).show();
+        }else {
+            timeStart();
+        }
+    }
+
+    @Override
+    public void showPage2() {
+        //交给parent处理吧
+        MainActivity parent  = (MainActivity) getActivity();
+        parent.showPage(1);
+    }
+
+    private void timeStart() {
+        textTimer.setBase(TimeUtil.convertStrTimeToLong(textTimer.getText().toString()));
+        textTimer.start();//开始计时
+    }
+
+    private void startVisible(boolean b) {
+        if(b){
+            btnPlay.setVisibility(View.GONE);
+            btnPause.setVisibility(View.VISIBLE);
+        }else {
+            btnPlay.setVisibility(View.VISIBLE);
+            btnPause.setVisibility(View.GONE);
+        }
+    }
+
+    public void setCurrentPosition(String aoiName) {
+        if(aoiName != null){
+            position.setText(aoiName);
+        }
     }
 }
