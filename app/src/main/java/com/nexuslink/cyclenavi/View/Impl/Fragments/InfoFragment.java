@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -24,15 +25,20 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 地图的fragment
  */
 public class InfoFragment extends Fragment  implements LocationSource, AMapLocationListener, View.OnClickListener {
     private static InfoFragment instance;
@@ -43,6 +49,17 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     private AMapLocationClient aMapLocationClient;
     private AMapLocationClientOption aMapLocationClientOption;
 
+    @OnClick(R.id.backtospeed) void back(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getViewpager().setCurrentItem(0);
+    }
+    @OnClick(R.id.flag)void addFlag (){
+
+    }
+
+    @OnClick(R.id.search) void search(){
+
+    }
     double lastLongitude;
     double lastAltitude;
     double lastLatitude;
@@ -62,6 +79,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
+        ButterKnife.bind(this,view);
         getPermission();
         initView(view,savedInstanceState);
         return view;
@@ -75,7 +93,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             setUpMap();
         }
         aMap.setMapType(AMap.LOCATION_TYPE_LOCATE);
-        aMap.setMinZoomLevel(10f);
+        aMap.setMinZoomLevel(15f);
         //监听定位，两个回调，激活与停止定位
         aMap.setLocationSource(this);
         aMap.setMyLocationEnabled(true);
@@ -163,7 +181,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             aMapLocationClient.setLocationOption(aMapLocationClientOption);
             aMapLocationClient.setLocationListener(this);
             aMapLocationClient.startLocation();
-            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()), 10));
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()), 15));
         }
     }
 
@@ -203,7 +221,6 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             Log.d("TAG",longitude + "");
             locationChangedListener.onLocationChanged(aMapLocation);
         }
-
     }
 
 
@@ -218,7 +235,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.location:
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()),10));
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()),15));
                 break;
         }
     }

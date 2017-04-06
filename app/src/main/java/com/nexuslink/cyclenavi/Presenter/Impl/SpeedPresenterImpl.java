@@ -39,4 +39,9 @@ public class SpeedPresenterImpl implements ISpeedPresenter {
     public void switchFragment() {
         speedView.showPage2();
     }
+
+    @Override
+    public void takePhoto() {
+        speedView.showCamera();
+    }
 }

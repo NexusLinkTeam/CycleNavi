@@ -33,7 +33,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp">
                 <RelativeLayout
-                    android:id="@+id/btn_take_photo"
+                    android:id="@+id/backtospeed"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <ImageView
@@ -54,23 +54,12 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp">
                 <RelativeLayout
-                    android:id="@+id/play"
+                    android:id="@+id/flag"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <ImageView
                         android:layout_centerInParent="true"
-                        android:src="@drawable/ic_play"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp" />
-                </RelativeLayout>
-                <RelativeLayout
-                    android:visibility="gone"
-                    android:id="@+id/pause"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/ic_pause"
+                        android:src="@drawable/star"
                         android:layout_width="26dp"
                         android:layout_height="26dp" />
                 </RelativeLayout>
@@ -83,12 +72,12 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp">
                 <RelativeLayout
-                    android:id="@+id/btn_map"
+                    android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <ImageView
                         android:layout_margin="12dp"
-                        android:src="@drawable/right"
+                        android:src="@drawable/search"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_centerVertical="true"

@@ -8,6 +8,6 @@ import static java.lang.Math.PI;
 
 public class RadUtil {
     public static float grad2Deg(float gradient) {
-        return (float) (gradient * 180 / 3.1);
+        return (float) (gradient * 180 / 3.141592653);
     }
 }

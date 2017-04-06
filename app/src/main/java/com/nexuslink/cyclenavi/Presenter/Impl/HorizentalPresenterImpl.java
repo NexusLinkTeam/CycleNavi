@@ -26,6 +26,7 @@ public class HorizentalPresenterImpl implements IHorizentalPresenter {
 
     @Override
     public void caculateDegree(SensorEvent sensorEvent) {
+
         //===================================计算坡度的算法==================================
         float g = (float) Math.sqrt(sensorEvent.values[0] * sensorEvent.values[0]
                 + sensorEvent.values[1] * sensorEvent.values[1]

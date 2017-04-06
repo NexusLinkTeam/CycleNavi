@@ -12,4 +12,6 @@ public interface ISpeedPresenter extends BasePresenter{
     void pauseCycle();
 
     void switchFragment();
+
+    void takePhoto();
 }

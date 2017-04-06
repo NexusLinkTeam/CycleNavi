@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import static android.content.Context.SENSOR_SERVICE;
 public class HorizentalFragment extends Fragment implements IHorizentalView,SensorEventListener {
 
     private SensorManager sensorManager;
-
+    private float[] gravity = new float[3];
 
     private IHorizentalPresenter presenter;
 
@@ -71,6 +72,7 @@ public class HorizentalFragment extends Fragment implements IHorizentalView,Sens
     @Override
     public void showDegree(float gradient) {
         textDegree.setText(Math.round(RadUtil.grad2Deg(gradient)) + "º");
+        Log.d("DEGREE",Math.round(RadUtil.grad2Deg(gradient)) + "º");
     }
 
     @Override
@@ -87,10 +89,24 @@ public class HorizentalFragment extends Fragment implements IHorizentalView,Sens
     public void onSensorChanged(SensorEvent sensorEvent) {
         switch (sensorEvent.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
+                final float alpha = 0.8f;
+                gravity[0] = alpha * gravity[0] + (1 - alpha) * sensorEvent.values[0];
+                gravity[1] = alpha * gravity[1] + (1 - alpha) * sensorEvent.values[1];
+                gravity[2] = alpha * gravity[2] + (1 - alpha) * sensorEvent.values[2];
+
+                String accInfo = "加速度传感器\n" +
+                        "x:" + (sensorEvent.values[0] - gravity [0]) + "\n" +
+                        "y:" + (sensorEvent.values[1] - gravity [1]) + "\n" +
+                        "z:" + (sensorEvent.values[2] - gravity[2]);
                 presenter.caculateDegree(sensorEvent);
                 break;
             case Sensor.TYPE_PRESSURE:
                 presenter.caculatePress(sensorEvent);
+                break;
+            case Sensor.TYPE_GRAVITY:
+                gravity[0] = sensorEvent.values[0];
+                gravity[1] = sensorEvent.values[1];
+                gravity[2] = sensorEvent.values[2];
                 break;
         }
     }

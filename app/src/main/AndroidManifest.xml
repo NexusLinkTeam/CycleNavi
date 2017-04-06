@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nexuslink.cyclenavi">
-
+    //相机权限
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA" />
     //高德地图权限
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
@@ -69,11 +70,6 @@
             android:theme="@style/AppTheme" />
 
         <service android:name="com.amap.api.location.APSService" />
-        <service android:name=".Service.VelocityMeasurementService">
-            <intent-filter>
-                <action android:name="cyclenavi.Service.VelocityMeasurementService" />
-            </intent-filter>
-        </service>
 
         <activity
             android:name=".View.Impl.Activities.SearchActivity"
@@ -100,6 +96,16 @@
         <activity android:name=".View.Impl.Activities.CommentActivity" />
         <activity android:name=".View.Impl.Activities.MapActivity" />
         <activity android:name=".View.Impl.Activities.DataActivity"></activity>
+        <provider
+            android:authorities="com.nexuslink.cyclenavi.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                />
+        </provider>
     </application>
 
 </manifest>

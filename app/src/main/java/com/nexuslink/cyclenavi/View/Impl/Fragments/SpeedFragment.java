@@ -1,9 +1,19 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +31,9 @@ import com.nexuslink.cyclenavi.View.Impl.Activities.DataActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 import com.nexuslink.cyclenavi.View.Interface.ISpeedView;
 
+import java.io.File;
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,6 +44,9 @@ import butterknife.OnClick;
  */
 
 public class SpeedFragment extends Fragment implements ISpeedView {
+    private static final int NEED_CAMERA = 0;
+    private static final int TAKE_PHOTO = 1;
+    private Uri uri;
     private ISpeedPresenter presenter;
 
     @BindView(R.id.panView)
@@ -57,7 +73,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     }
 
     @OnClick(R.id.btn_take_photo) void takePhoto(){
-
+        presenter.takePhoto();
     }
 
     @Override
@@ -132,6 +148,52 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         //交给parent处理吧
         MainActivity parent  = (MainActivity) getActivity();
         parent.showPage(1);
+    }
+
+    @Override
+    public void showCamera() {
+        //检查权限
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ==  PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED){
+            //获得权限
+            File path = new File(Environment.getExternalStorageDirectory()+"/DCIM"+"/Demo");
+            if(!path.exists()){
+                path.mkdir();
+            }
+
+            File file = new File(Environment.getExternalStorageDirectory()+"/DCIM"+"/Demo","Img_"+System.currentTimeMillis()+".png");
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(Build.VERSION.SDK_INT >= 24){
+                uri = FileProvider.getUriForFile(getContext(),"com.nexuslink.cyclenavi.fileprovider",file);
+            }else {
+                uri = Uri.fromFile(file);
+            }
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+            getActivity().startActivityForResult(intent,TAKE_PHOTO);
+        }else {
+            //未获得权限
+            getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE},NEED_CAMERA);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void timeStart() {

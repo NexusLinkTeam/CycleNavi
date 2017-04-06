@@ -673,4 +673,8 @@ public class MainActivity extends AppCompatActivity
         mainPager.setCurrentItem(position);
     }
 
+    public ViewPager getViewpager(){
+        return mainPager;
+    }
+
 }
