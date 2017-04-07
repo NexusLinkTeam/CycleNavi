@@ -489,6 +489,15 @@ public class MainActivity extends AppCompatActivity
 
     private TextView text;
     private CircleImageView circleImageView;
+    private int Speed;
+
+    public int getSpeed() {
+        return Speed;
+    }
+
+    public void setSpeed(int speed) {
+        Speed = speed;
+    }
 
     @BindView(R.id.viewpager_main)
     ViewPager mainPager;

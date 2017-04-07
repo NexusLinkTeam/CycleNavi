@@ -1,6 +1,7 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -24,13 +24,13 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
+import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -48,6 +48,8 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     private LocationSource.OnLocationChangedListener locationChangedListener;
     private AMapLocationClient aMapLocationClient;
     private AMapLocationClientOption aMapLocationClientOption;
+    private ISpeedPresenter presenter;
+
 
     @OnClick(R.id.backtospeed) void back(){
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -175,6 +177,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             //获得当前位置
             aMapLocationClientOption = new AMapLocationClientOption();
             aMapLocationClientOption.setInterval(2000);
+            aMapLocationClientOption.setSensorEnable(true);
             //模式可以写在设置里
             aMapLocationClientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             aMapLocationClient = new AMapLocationClient(getContext());
@@ -207,10 +210,12 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             double altitude = aMapLocation.getAltitude();//高度
             double latitude = aMapLocation.getLatitude();//维度
             Log.d("TAG4",longitude+"curre");
-            Log.d("TAG4",lastLongitude+"last");
-
-            double speed = getDistance(latitude,longitude,lastLatitude,lastLongitude)/2 * 60 *60;
-            Log.d("TAG4",speed+"shudu");
+            Log.d("TAG4",+aMapLocation.getSpeed()+"");
+            /*new SpeedFragment().panView.setPercent((int) aMapLocation.getSpeed()/40);*/
+            Intent intent = new Intent();
+            intent.setAction("com.nexuslink.cyclenavi.speed");
+            intent.putExtra("data",(int)aMapLocation.getSpeed());
+            getContext().sendBroadcast(intent);
             lastLongitude = longitude;//经度
             lastAltitude = altitude;//高度
             lastLatitude = latitude;//维度
@@ -235,7 +240,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.location:
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()),15));
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()),18));
                 break;
         }
     }
@@ -253,4 +258,6 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
         s = Math.round(s * 10000) / 10000;
         return s;
     }
+
+
 }
