@@ -1,5 +1,8 @@
 package com.nexuslink.cyclenavi.Presenter.Interface;
 
+import android.content.Context;
+import android.net.Uri;
+
 import com.nexuslink.cyclenavi.BasePresenter;
 
 /**
@@ -13,5 +16,9 @@ public interface ISpeedPresenter extends BasePresenter{
 
     void switchFragment();
 
-    void takePhoto();
+    void takePhoto(Context context);
+
+    Uri getUri();
+
+    void scan(Context context);
 }
