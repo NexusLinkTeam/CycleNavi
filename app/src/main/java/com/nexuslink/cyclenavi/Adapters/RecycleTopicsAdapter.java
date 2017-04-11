@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +33,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private List<FreshBean.ArticlesBean> articles;
     private onTopicClickListener onTopicClickListener;
 
+    public List<FreshBean.ArticlesBean> getArticles() {
+        return articles;
+    }
 
     public void setOnTopicClickListener(RecycleTopicsAdapter.onTopicClickListener onTopicClickListener) {
         this.onTopicClickListener = onTopicClickListener;
@@ -134,6 +138,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         articles.clear();
     }
 
+
+
+
     public class TopicsViewHolder extends RecyclerView.ViewHolder{
         private TextView userName;
         private TextView content;
@@ -166,9 +173,21 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    private class BottomLoadHolder extends RecyclerView.ViewHolder {
+    public class BottomLoadHolder extends RecyclerView.ViewHolder {
+        private ProgressBar progressBar;
+        private TextView info;
         public BottomLoadHolder(View itemView) {
             super(itemView);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.btom_load);
+            info = (TextView) itemView.findViewById(R.id.btom_text);
+        }
+
+        public ProgressBar getProgressBar() {
+            return progressBar;
+        }
+
+        public TextView getInfo() {
+            return info;
         }
     }
 

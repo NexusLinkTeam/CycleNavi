@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ForumActivity extends AppCompatActivity {
+public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private RecycleTopicsAdapter recyclerTopicsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerTopics;
@@ -50,32 +51,47 @@ public class ForumActivity extends AppCompatActivity {
         actionBar.setTitle(R.string.forum);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        articles = new ArrayList<>();
+
         recyclerTopics = (RecyclerView) findViewById(R.id.recycle_topics);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiftFresh);
 
+        recyclerTopics.setLayoutManager(linearLayoutManager = new LinearLayoutManager(ForumActivity.this));
 
+        recyclerTopicsAdapter = new RecycleTopicsAdapter(ForumActivity.this,articles);
+
+        recyclerTopics.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(recyclerTopicsAdapter.getArticles().size() > 0 && newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1){
+                    showNextPage(recyclerTopicsAdapter.getArticles().get(articles.size() - 1).getArticleId());
+                }
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //获取最后一个能见的位置
+                lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
 
         //创建时加载数据
         swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                getArticles(recyclerTopics);
-            }
-        });
         getArticles(recyclerTopics);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void showNextPage(final int last) {
-        Log.d("TAG",last+"");
         RetrofitWrapper.getInstance().create(ICycleNaviService.class).more("10",last+"").enqueue(new Callback<FreshBean>() {
             @Override
             public void onResponse(Call<FreshBean> call, Response<FreshBean> response) {
-                Log.d("TAG",response.code()+"");
                 if(response.code() == 200){
                     if(response.body().getArticles().size() == 0){
-                        Toast.makeText(ForumActivity.this,"dao",Toast.LENGTH_SHORT).show();
+                       //到底了
+                        
                     }else {
                         recyclerTopicsAdapter.loadMore(response.body().getArticles());
                     }
@@ -90,40 +106,15 @@ public class ForumActivity extends AppCompatActivity {
             }
         });
     }
-
     private void getArticles(final RecyclerView recyclerTopics) {
+        //获得UserID
         RetrofitWrapper.getInstance().create(ICycleNaviService.class).fresh("10").enqueue(new Callback<FreshBean>() {
             @Override
             public void onResponse(Call<FreshBean> call, final Response<FreshBean> response) {
                 if(response.code() == 200){
                     //请求成功，关闭刷新
                     swipeRefreshLayout.setRefreshing(false);
-                    recyclerTopics.setLayoutManager(linearLayoutManager = new LinearLayoutManager(ForumActivity.this));
-                    articles = response.body().getArticles();
-                    recyclerTopicsAdapter = new RecycleTopicsAdapter(ForumActivity.this,articles);
-                    recyclerTopics.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            Log.d("TAG","即将请求");
-                            Log.d("TAG",lastVisibleItem+"");
-                            Log.d("TAG",recyclerTopicsAdapter.getItemCount()+"");
-                            if(newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1){
-                                    Log.d("TAG","ci"+ response.body().getArticles().size());
-                                Log.d("TAG",("ci"+ (recyclerTopicsAdapter.getItemCount()-3)+""));
-                                showNextPage(response.body().getArticles().get(response.body().getArticles().size() - 1).getArticleId());
-                            }
-
-
-                        }
-
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-                            lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                        }
-                    });
-
+                    recyclerTopicsAdapter.loadMore(response.body().getArticles());
                     recyclerTopicsAdapter.setOnTopicClickListener(new RecycleTopicsAdapter.onTopicClickListener() {
                         @Override
                         public void onlikeClicked(View view) {
@@ -170,12 +161,15 @@ public class ForumActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-
-
     }
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onFreshEvent(FreshEvent messageEvent){
         getArticles(recyclerTopics);
     }
 
+    @Override
+    public void onRefresh() {
+        recyclerTopicsAdapter.removeAll();
+        getArticles(recyclerTopics);
+    }
 }
