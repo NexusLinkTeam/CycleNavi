@@ -37,7 +37,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotosView
     @Override
     public void onBindViewHolder(PhotosViewHolder holder, int position) {
         Log.d("TAG",articleImages.get(holder.getLayoutPosition()));
-        Glide.with(context).load(articleImages.get(position)).into(holder.images);
+       /* Glide.with(context).load(articleImages.get(position)).into(holder.images);*/
         holder.images.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

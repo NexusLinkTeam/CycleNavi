@@ -74,8 +74,7 @@ public interface ICycleNaviService {
 
     @FormUrlEncoded
     @POST("/cycle/api/article/more")
-    Call<FreshBean> more(@Field("userId") String userId,
-                        @Field("lastArticleId") String lastArticleId );
+    Call<FreshBean> more(@Field("userId")String userId, @Field("lastArticleId") String lastArticleId);
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getHis")

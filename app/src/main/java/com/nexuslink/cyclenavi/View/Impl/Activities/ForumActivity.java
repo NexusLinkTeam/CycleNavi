@@ -1,6 +1,5 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,52 +8,43 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Adapters.RecycleTopicsAdapter;
-import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
+import com.nexuslink.cyclenavi.Presenter.Impl.ForumPresenter;
+import com.nexuslink.cyclenavi.Presenter.Interface.IForumPresenter;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Util.FreshEvent;
-import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.View.Interface.IForumView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-
-public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,IForumView{
     private RecycleTopicsAdapter recyclerTopicsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerTopics;
+/*
     private List<FreshBean.ArticlesBean> articles;
+*/
     private int lastVisibleItem;
     private LinearLayoutManager linearLayoutManager;
+    private IForumPresenter presenter;
+    private Boolean freshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
-        EventBus.getDefault().register(this);
+       /* EventBus.getDefault().register(this);*/
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle(R.string.forum);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        presenter = new ForumPresenter(this);
 
-        articles = new ArrayList<>();
+        initView();
+        initData();
+        initEvent();
 
-        recyclerTopics = (RecyclerView) findViewById(R.id.recycle_topics);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiftFresh);
+       /* articles = new ArrayList<>();
 
         recyclerTopics.setLayoutManager(linearLayoutManager = new LinearLayoutManager(ForumActivity.this));
 
@@ -171,5 +161,90 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     public void onRefresh() {
         recyclerTopicsAdapter.removeAll();
         getArticles(recyclerTopics);
+    }*/
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initData() {
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerTopics.setLayoutManager(linearLayoutManager);
+    }
+
+    private void initEvent() {
+        swipeRefreshLayout.setOnRefreshListener(this);
+        recyclerTopics.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d("MY_TAG","当前recycle中articleSize ："+""+ recyclerTopicsAdapter.getArticles().size());
+                Log.d("MY_TAG","lastVisibleItem ："+""+ lastVisibleItem);
+                Log.d("MY_TAG","recyclerTopicsAdapter.getItemCount() - 1 :"+ (recyclerTopicsAdapter.getItemCount() - 1));
+                if(recyclerTopicsAdapter.getArticles().size() > 0
+                        && newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1
+                        && !freshing){
+                    int lastArticleId = recyclerTopicsAdapter.getArticles().
+                            get(recyclerTopicsAdapter.getItemCount() - 3).getArticleId();
+                    Log.d("MY_TAG","条件通过");
+                    Log.d("MY_TAG","是否在正在刷新"+String.valueOf(freshing));
+                    Log.d("MY_TAG","最后一篇文章id"+String.valueOf(lastArticleId));
+                    freshing = true;
+                    presenter.obtainMoreArticles(lastArticleId);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
+    }
+
+    private void initView() {
+
+        //初始化toolbar
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(R.string.forum);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        recyclerTopics = (RecyclerView) findViewById(R.id.recycle_topics);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiftFresh);
+
+        swipeRefreshLayout.setRefreshing(true);
+        presenter.obtainArticles();
+    }
+
+    @Override
+    public void onRefresh() {
+        recyclerTopicsAdapter.removeAll();
+        presenter.obtainArticles();
+    }
+
+    @Override
+    public void showArticlesInRecycle(List<FreshBean.ArticlesBean> articles) {
+        swipeRefreshLayout.setRefreshing(false);
+        recyclerTopicsAdapter = new RecycleTopicsAdapter(this,articles);
+        recyclerTopics.setAdapter(recyclerTopicsAdapter);
+    }
+
+    @Override
+    public void showMoreArticlesInRecycle(List<FreshBean.ArticlesBean> articles) {
+        swipeRefreshLayout.setRefreshing(false);
+        recyclerTopicsAdapter.loadMore(articles);
+        freshing = false;
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:src="@drawable/default_photo"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/img_user"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+    <TextView
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/img_user"
+        android:text="Rye"
+        android:id="@+id/text_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/img_user"
+        android:text="内容"
+        android:layout_below="@id/text_name"
+        android:id="@+id/text_replay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/img_user"
+        android:layout_below="@id/text_replay"
+        android:alpha="0.15"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp">
+    </LinearLayout>
+</RelativeLayout>

@@ -74,7 +74,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(holder instanceof TopicsViewHolder){
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
+/*
             Glide.with(context).load(articles.get(position-1).getUser().getUserImg()).into(((TopicsViewHolder) holder).userPhoto);
+*/
 
             LinearLayoutManager manager = new LinearLayoutManager(context);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -129,17 +131,14 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void loadMore(List<FreshBean.ArticlesBean> addarticles) {
-        Log.d("TAG","Article size："+articles.size()+"");
-        articles.addAll(addarticles);
-        notifyDataSetChanged();
+            articles.addAll(addarticles);
+            notifyDataSetChanged();
     }
 
     public void removeAll() {
         articles.clear();
+        notifyDataSetChanged();
     }
-
-
-
 
     public class TopicsViewHolder extends RecyclerView.ViewHolder{
         private TextView userName;
