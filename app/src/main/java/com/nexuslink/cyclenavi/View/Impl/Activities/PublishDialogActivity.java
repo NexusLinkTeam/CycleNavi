@@ -1,6 +1,8 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.nanchen.compresshelper.CompressHelper;
 import com.nexuslink.cyclenavi.Adapters.PhotosPrepareAdapter;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.ArticleBean;
@@ -93,7 +96,16 @@ public class PublishDialogActivity extends AppCompatActivity {
             Log.d("TAG_123",images.size() + images.get(0).path);
             List<MultipartBody.Part> list = new ArrayList<>();
             for (ImageItem image : images){
-                File file = new File(image.path);
+                File fileold = new File(image.path);
+                File file = new CompressHelper.Builder(this)
+                        .setMaxWidth(720)  // 默认最大宽度为720
+                        .setMaxHeight(960) // 默认最大高度为960
+                        .setQuality(60)    // 默认压缩质量为80
+                        .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
+                        .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                        .build()
+                        .compressToFile(fileold);
                 RequestBody requestFile =
                         RequestBody.create(MediaType.parse("image/png"), file);
                 MultipartBody.Part img =

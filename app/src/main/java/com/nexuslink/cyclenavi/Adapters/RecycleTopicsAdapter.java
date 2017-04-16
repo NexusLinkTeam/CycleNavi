@@ -76,8 +76,8 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
             Glide.with(context).load(articles.get(position-1).getUser().getUserImg()).into(((TopicsViewHolder) holder).userPhoto);
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+           /* LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);*/
 
            /* ((TopicsViewHolder) holder).photos.setLayoutManager(manager);
             ((TopicsViewHolder) holder).photos.setAdapter(new PhotosAdapter(context, (List<String>) articles.get(holder.getLayoutPosition() - 1).getArticleImgs()));
@@ -89,9 +89,10 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     context.startActivity(intent);
                 }
             });*/
-           if(articles.get(position - 1).getArticleImgs().size() != 0){
+            List<?> list = articles.get(position - 1).getArticleImgs();
+           if(list.size() != 0){
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.VISIBLE);
-               Glide.with(context).load(articles.get(position-1).getArticleImgs().get(0)).into(((TopicsViewHolder) holder).photos);
+               Glide.with(context).load(list.get(0)).into(((TopicsViewHolder) holder).photos);
            }else {
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.GONE);
            }

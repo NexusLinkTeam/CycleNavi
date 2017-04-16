@@ -246,5 +246,6 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     @Override
     public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+        freshing = false;
     }
 }

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="CompressHelper-1.0.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/12d4581d7f0e0b059bd86acd5544ea1575118894/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/12d4581d7f0e0b059bd86acd5544ea1575118894/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.nanchen2251/CompressHelper/1.0.3/1ae167865c175f04a2e08cf9e4328b949f7a4a9a/CompressHelper-1.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
