@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -74,14 +75,11 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(holder instanceof TopicsViewHolder){
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
-/*
             Glide.with(context).load(articles.get(position-1).getUser().getUserImg()).into(((TopicsViewHolder) holder).userPhoto);
-*/
-
             LinearLayoutManager manager = new LinearLayoutManager(context);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-            ((TopicsViewHolder) holder).photos.setLayoutManager(manager);
+           /* ((TopicsViewHolder) holder).photos.setLayoutManager(manager);
             ((TopicsViewHolder) holder).photos.setAdapter(new PhotosAdapter(context, (List<String>) articles.get(holder.getLayoutPosition() - 1).getArticleImgs()));
 
             ((TopicsViewHolder) holder).photos.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +88,13 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     Intent intent = new Intent(context, LookUpActivity.class);
                     context.startActivity(intent);
                 }
-            });
+            });*/
+           if(articles.get(position - 1).getArticleImgs().size() != 0){
+               ((TopicsViewHolder) holder).img_relative.setVisibility(View.VISIBLE);
+               Glide.with(context).load(articles.get(position-1).getArticleImgs().get(0)).into(((TopicsViewHolder) holder).photos);
+           }else {
+               ((TopicsViewHolder) holder).img_relative.setVisibility(View.GONE);
+           }
             ((TopicsViewHolder) holder).time.setText(articles.get(position - 1).getTime());
 
             ((TopicsViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
@@ -144,18 +148,19 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         private TextView userName;
         private TextView content;
         private ImageView userPhoto;
-        private RecyclerView photos;
+        private ImageView photos;
         private TextView time;
         private ImageView like;
         private ImageView comment;
-
+        private RelativeLayout img_relative;
 
         public TopicsViewHolder(View itemView) {
             super(itemView);
+            img_relative = (RelativeLayout) itemView.findViewById(R.id.img_relative);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             content = (TextView) itemView.findViewById(R.id.user_content);
             userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
-            photos = (RecyclerView) itemView.findViewById(R.id.recycle_photos);
+            photos = (ImageView) itemView.findViewById(R.id.first_image);
             time = (TextView) itemView.findViewById(R.id.article_time);
             like = (ImageView) itemView.findViewById(R.id.like);
             comment = (ImageView) itemView.findViewById(R.id.comment);

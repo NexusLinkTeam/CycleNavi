@@ -61,10 +61,54 @@
                 android:text="测测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试试"
                 android:textColor="@android:color/black" />
 
-            <android.support.v7.widget.RecyclerView
+           <!-- <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_photos"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>-->
+            <RelativeLayout
+                android:id="@+id/img_relative"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_margin="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/first_image"
+                        android:scaleType="centerCrop"
+                        android:layout_margin="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_marginBottom="4dp"
+                            android:alpha="0.1"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@android:color/black"
+                            android:layout_alignParentBottom="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp">
+                        </LinearLayout>
+                        <TextView
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_alignParentBottom="true"
+                            android:text="上传了2张骑行图片"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
