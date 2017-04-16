@@ -53,4 +53,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.github.nanchen2251:CompressHelper:1.0.3'
+    compile 'com.bm.photoview:library:1.4.1'
 }

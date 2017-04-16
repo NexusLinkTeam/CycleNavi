@@ -1,5 +1,6 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Adapters.RecycleTopicsAdapter;
@@ -20,13 +23,10 @@ import com.nexuslink.cyclenavi.View.Interface.IForumView;
 import java.util.List;
 
 
-public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,IForumView{
+public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,IForumView, RecycleTopicsAdapter.onTopicClickListener {
     private RecycleTopicsAdapter recyclerTopicsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerTopics;
-/*
-    private List<FreshBean.ArticlesBean> articles;
-*/
     private int lastVisibleItem;
     private LinearLayoutManager linearLayoutManager;
     private IForumPresenter presenter;
@@ -233,6 +233,7 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     public void showArticlesInRecycle(List<FreshBean.ArticlesBean> articles) {
         swipeRefreshLayout.setRefreshing(false);
         recyclerTopicsAdapter = new RecycleTopicsAdapter(this,articles);
+        recyclerTopicsAdapter.setOnTopicClickListener(this);
         recyclerTopics.setAdapter(recyclerTopicsAdapter);
     }
 
@@ -247,5 +248,24 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
         freshing = false;
+    }
+
+    @Override
+    public void onlikeClicked(View view) {
+        ImageView imageView = (ImageView) view;
+        imageView.setImageDrawable(getDrawable(R.drawable.like));
+    }
+
+    @Override
+    public void onCommentClicke() {
+        Intent intent = new Intent(ForumActivity.this,CommentActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onOthersPhotoClick() {
+        //区分
+        Intent intent = new Intent(ForumActivity.this,PersonalActivity.class);
+        startActivity(intent);
     }
 }

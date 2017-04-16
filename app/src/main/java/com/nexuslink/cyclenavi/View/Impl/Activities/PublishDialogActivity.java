@@ -24,6 +24,7 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.ArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.Util.FileManager;
 import com.nexuslink.cyclenavi.Util.FreshEvent;
 import com.nexuslink.cyclenavi.Util.GlideImageLoader;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
@@ -100,7 +101,7 @@ public class PublishDialogActivity extends AppCompatActivity {
                 File file = new CompressHelper.Builder(this)
                         .setMaxWidth(720)  // 默认最大宽度为720
                         .setMaxHeight(960) // 默认最大高度为960
-                        .setQuality(60)    // 默认压缩质量为80
+                        .setQuality(60)
                         .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
                         .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                                 Environment.DIRECTORY_PICTURES).getAbsolutePath())

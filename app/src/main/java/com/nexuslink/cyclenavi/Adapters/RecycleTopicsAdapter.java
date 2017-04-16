@@ -21,6 +21,7 @@ import com.nexuslink.cyclenavi.View.Impl.Activities.ForumActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.LookUpActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.PublishDialogActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,7 +72,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof TopicsViewHolder){
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
@@ -89,9 +90,17 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     context.startActivity(intent);
                 }
             });*/
-            List<?> list = articles.get(position - 1).getArticleImgs();
+            List<String> list = articles.get(position - 1).getArticleImgs();
            if(list.size() != 0){
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.VISIBLE);
+               ((TopicsViewHolder) holder).img_relative.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       Intent intent = new Intent(context, LookUpActivity.class);
+                       intent.putStringArrayListExtra("PICTURES", (ArrayList<String>) articles.get(position - 1).getArticleImgs());
+                       context.startActivity(intent);
+                   }
+               });
                Glide.with(context).load(list.get(0)).into(((TopicsViewHolder) holder).photos);
            }else {
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.GONE);

@@ -1,8 +1,11 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
+import com.nanchen.compresshelper.CompressHelper;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.Interface.IPersonalModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
@@ -36,7 +39,16 @@ public class PersonalModel implements IPersonalModel {
 
     @Override
     public void upLoad(Uri uri, PersonalActivity context) {
-        File file = new File(FileManager.getRealPathFromURI(uri,context));
+        File fileold = new File(FileManager.getRealPathFromURI(uri,context));
+        File file = new CompressHelper.Builder(context)
+                .setMaxWidth(720)  // 默认最大宽度为720
+                .setMaxHeight(960) // 默认最大高度为960
+                .setQuality(40)
+                .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToFile(fileold);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("image/png"), file);
 

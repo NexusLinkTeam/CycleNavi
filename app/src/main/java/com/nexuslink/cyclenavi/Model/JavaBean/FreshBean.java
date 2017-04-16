@@ -54,7 +54,7 @@ public class FreshBean {
         private String date;
         private String time;
         private boolean likeArticle;
-        private List<?> articleImgs;
+        private List<String> articleImgs;
 
         public int getArticleId() {
             return articleId;
@@ -128,11 +128,11 @@ public class FreshBean {
             this.likeArticle = likeArticle;
         }
 
-        public List<?> getArticleImgs() {
+        public List<String> getArticleImgs() {
             return articleImgs;
         }
 
-        public void setArticleImgs(List<?> articleImgs) {
+        public void setArticleImgs(List<String> articleImgs) {
             this.articleImgs = articleImgs;
         }
 
