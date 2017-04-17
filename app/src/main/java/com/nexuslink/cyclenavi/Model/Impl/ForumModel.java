@@ -8,6 +8,7 @@ import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.Presenter.Interface.IForumPresenter;
 import com.nexuslink.cyclenavi.Util.RequestUtil;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ForumModel implements IForumModel {
 
     @Override
     public void requestArticles() {
-        int userId = getUserIdFromSp();
+        String userId = getUserIdFromSp();
         RequestUtil.fresh(String.valueOf(userId)).enqueue(new Callback<FreshBean>() {
 
             @Override
@@ -47,9 +48,9 @@ public class ForumModel implements IForumModel {
 
     @Override
     public void requestMoreArticles(int lastArticleId) {
-        int userId = getUserIdFromSp();
+        String userId = getUserIdFromSp();
         Log.d("MY_TAG","Model层收到即将请求信息");
-        RequestUtil.more(String.valueOf(userId),
+        RequestUtil.more(userId,
                 String.valueOf(lastArticleId)).enqueue(new Callback<FreshBean>() {
 
             @Override
@@ -71,8 +72,9 @@ public class ForumModel implements IForumModel {
         });
     }
 
-    private int getUserIdFromSp() {
+    private String getUserIdFromSp() {
         //测试
-        return 10;
+        Log.d("My_TAG",SpUtil.getUserId(presenter.getContext()));
+        return SpUtil.getUserId(presenter.getContext());
     }
 }

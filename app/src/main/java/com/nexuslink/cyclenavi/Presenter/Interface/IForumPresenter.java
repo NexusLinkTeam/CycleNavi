@@ -1,5 +1,7 @@
 package com.nexuslink.cyclenavi.Presenter.Interface;
 
+import android.content.Context;
+
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 
 import java.util.List;
@@ -18,4 +20,6 @@ public interface IForumPresenter {
     void reciveMoreArticles(List<FreshBean.ArticlesBean> articles);
 
     void requestFailed(String message);
+
+    Context getContext();
 }

@@ -28,6 +28,7 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 
 
 import retrofit2.Call;
@@ -216,18 +217,17 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
                         if(response.body().getCode() == 200){
-                            SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
-                            sharedPreferences.edit().
-                                    putBoolean("isUserLogin",true).
-                                    putString("name",mEmail).
-                                    putString("uid", String.valueOf(response.body().getUid())).apply();
+                            SpUtil.setLoginStatus(LoginActivity.this,true);
+                            SpUtil.setUserName(LoginActivity.this,mEmail);
+                            SpUtil.setUserId(LoginActivity.this,String.valueOf(response.body().getUid()));
                             mAuthTask = null;
                             showProgress(false);
                             setResult(RESULT_OK);
                             finish();
                         }else {
-                            SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
-                            sharedPreferences.edit().putBoolean("isUserLogin",false).apply();
+                            SpUtil.setLoginStatus(LoginActivity.this,false);
+                            SpUtil.setUserName(LoginActivity.this,"name");
+                            SpUtil.setUserId(LoginActivity.this,"");
                             mAuthTask = null;
                             showProgress(false);
                             mPasswordView.setError(getString(R.string.error_incorrect_password));

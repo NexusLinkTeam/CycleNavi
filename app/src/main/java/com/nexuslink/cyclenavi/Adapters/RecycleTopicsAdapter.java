@@ -74,22 +74,12 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof TopicsViewHolder){
+            Log.d("MY_TAG",articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
+            // todo：头像可以做个缓存
             Glide.with(context).load(articles.get(position-1).getUser().getUserImg()).into(((TopicsViewHolder) holder).userPhoto);
-           /* LinearLayoutManager manager = new LinearLayoutManager(context);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);*/
 
-           /* ((TopicsViewHolder) holder).photos.setLayoutManager(manager);
-            ((TopicsViewHolder) holder).photos.setAdapter(new PhotosAdapter(context, (List<String>) articles.get(holder.getLayoutPosition() - 1).getArticleImgs()));
-
-            ((TopicsViewHolder) holder).photos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, LookUpActivity.class);
-                    context.startActivity(intent);
-                }
-            });*/
             List<String> list = articles.get(position - 1).getArticleImgs();
            if(list.size() != 0){
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.VISIBLE);

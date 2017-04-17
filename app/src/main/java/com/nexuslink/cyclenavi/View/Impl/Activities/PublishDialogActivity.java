@@ -28,6 +28,7 @@ import com.nexuslink.cyclenavi.Util.FileManager;
 import com.nexuslink.cyclenavi.Util.FreshEvent;
 import com.nexuslink.cyclenavi.Util.GlideImageLoader;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -118,9 +119,8 @@ public class PublishDialogActivity extends AppCompatActivity {
             RequestBody aId =
                     RequestBody.create(MediaType.parse("multipart/form-data"),articleId+"");
 
-            //默认user
             RequestBody uid =
-                    RequestBody.create(MediaType.parse("multipart/form-data"),"10");
+                    RequestBody.create(MediaType.parse("multipart/form-data"), SpUtil.getUserId(this));
 
             RetrofitWrapper.getInstance().create(ICycleNaviService.class).article(aId,uid,list).enqueue(new Callback<ArticleBean>() {
                 @Override
@@ -139,7 +139,8 @@ public class PublishDialogActivity extends AppCompatActivity {
     }
 
     private void upLoadText(TextView text) {
-        RetrofitWrapper.getInstance().create(ICycleNaviService.class).publish("10",text.getText().toString()).enqueue(new Callback<PublishBean>() {
+        Log.d("MY_TAG","上传前"+SpUtil.getUserId(this));
+        RetrofitWrapper.getInstance().create(ICycleNaviService.class).publish(SpUtil.getUserId(this),text.getText().toString()).enqueue(new Callback<PublishBean>() {
             @Override
             public void onResponse(Call<PublishBean> call, Response<PublishBean> response) {
                 upLoadImages(images,response.body().getArticleId());

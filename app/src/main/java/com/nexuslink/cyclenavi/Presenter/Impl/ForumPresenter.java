@@ -1,5 +1,7 @@
 package com.nexuslink.cyclenavi.Presenter.Impl;
 
+import android.content.Context;
+
 import com.nexuslink.cyclenavi.Model.Impl.ForumModel;
 import com.nexuslink.cyclenavi.Model.Interface.IForumModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
@@ -43,5 +45,10 @@ public class ForumPresenter implements IForumPresenter {
     @Override
     public void requestFailed(String message) {
         forumView.showError(message);
+    }
+
+    @Override
+    public Context getContext() {
+        return forumView.getThis();
     }
 }

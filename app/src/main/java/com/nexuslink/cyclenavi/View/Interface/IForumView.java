@@ -1,5 +1,7 @@
 package com.nexuslink.cyclenavi.View.Interface;
 
+import android.content.Context;
+
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 
 import java.util.List;
@@ -14,4 +16,6 @@ public interface IForumView {
     void showMoreArticlesInRecycle(List<FreshBean.ArticlesBean> articles);
 
     void showError(String message);
+
+    Context getThis();
 }

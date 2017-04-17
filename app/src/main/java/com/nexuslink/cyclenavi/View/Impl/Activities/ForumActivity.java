@@ -1,5 +1,6 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -248,6 +249,11 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
         freshing = false;
+    }
+
+    @Override
+    public Context getThis() {
+        return this;
     }
 
     @Override
