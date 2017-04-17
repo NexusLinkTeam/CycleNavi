@@ -105,8 +105,10 @@ public class PublishDialogActivity extends AppCompatActivity {
                         .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
                         .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                                 Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                        .build()
-                        .compressToFile(fileold);
+                        .build().compressToFile(fileold);
+
+
+
                 RequestBody requestFile =
                         RequestBody.create(MediaType.parse("image/png"), file);
                 MultipartBody.Part img =
