@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Created by Rye on 2017/3/5.
  */
-public class photoPagerAdapter extends PagerAdapter {
+public class PhotoPagerAdapter extends PagerAdapter {
     private List<View> pictures;
     private Context context;
-    public photoPagerAdapter(Context context, List<View> pictures) {
+    public PhotoPagerAdapter(Context context, List<View> pictures) {
         this.pictures = pictures;
         this.context = context;
     }

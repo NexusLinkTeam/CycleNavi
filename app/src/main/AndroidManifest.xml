@@ -92,7 +92,7 @@
             android:windowSoftInputMode="stateUnspecified|adjustUnspecified" />
         <activity
             android:name=".View.Impl.Activities.LookUpActivity"
-            android:theme="@style/NaviBlackTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".View.Impl.Activities.CommentActivity" />
         <activity android:name=".View.Impl.Activities.MapActivity" />
         <activity android:name=".View.Impl.Activities.DataActivity"></activity>
