@@ -2,6 +2,7 @@ package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,10 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,IForumView, RecycleTopicsAdapter.onTopicClickListener {
+public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,IForumView, RecycleTopicsAdapter.onTopicClickListener, View.OnClickListener {
     private RecycleTopicsAdapter recyclerTopicsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerTopics;
+    private FloatingActionButton fab;
     private int lastVisibleItem;
     private LinearLayoutManager linearLayoutManager;
     private IForumPresenter presenter;
@@ -180,6 +182,7 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     private void initEvent() {
+        fab.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerTopics.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -217,8 +220,10 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
         actionBar.setTitle(R.string.forum);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         recyclerTopics = (RecyclerView) findViewById(R.id.recycle_topics);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiftFresh);
+
 
         swipeRefreshLayout.setRefreshing(true);
         presenter.obtainArticles();
@@ -258,8 +263,14 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
 
     @Override
     public void onlikeClicked(View view) {
-        ImageView imageView = (ImageView) view;
-        imageView.setImageDrawable(getDrawable(R.drawable.like));
+        // // TODO: 2017/4/17 点赞的request
+        if(!presenter.checkIsLike()){
+            ImageView imageView = (ImageView) view;
+            imageView.setImageDrawable(getDrawable(R.drawable.like));
+            presenter.likeThis();
+        }else {
+            Toast.makeText(this,"已经赞过了呢",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -273,5 +284,15 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
         //区分
         Intent intent = new Intent(ForumActivity.this,PersonalActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab:
+                Intent intent = new Intent(this,PublishDialogActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

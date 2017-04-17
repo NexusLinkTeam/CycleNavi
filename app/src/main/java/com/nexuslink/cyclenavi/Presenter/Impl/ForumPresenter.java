@@ -51,4 +51,14 @@ public class ForumPresenter implements IForumPresenter {
     public Context getContext() {
         return forumView.getThis();
     }
+
+    @Override
+    public boolean checkIsLike() {
+        return false;
+    }
+
+    @Override
+    public void likeThis() {
+
+    }
 }

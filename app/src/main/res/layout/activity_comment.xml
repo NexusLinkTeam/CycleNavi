@@ -11,11 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/emptyInfo"
+        android:layout_centerInParent="true"
+        android:text="@string/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <View
             android:background="@drawable/shaow"
             android:layout_width="match_parent"
@@ -27,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <EditText
+                android:id="@+id/message_edit"
                 android:maxLines="5"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
@@ -36,11 +45,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <ImageView
-                android:src="@drawable/default_photo"
+                android:id="@+id/send_comment"
+                android:src="@drawable/send"
                 android:layout_marginTop="20dp"
                 android:layout_weight="0"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="25dp"
+                android:layout_height="25dp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

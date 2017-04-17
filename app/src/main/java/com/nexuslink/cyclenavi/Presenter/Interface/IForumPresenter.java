@@ -22,4 +22,8 @@ public interface IForumPresenter {
     void requestFailed(String message);
 
     Context getContext();
+
+    boolean checkIsLike();
+
+    void likeThis();
 }

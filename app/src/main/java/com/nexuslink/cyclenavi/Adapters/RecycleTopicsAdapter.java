@@ -97,10 +97,17 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
            }
             ((TopicsViewHolder) holder).time.setText(articles.get(position - 1).getTime());
 
+            Boolean isLike = articles.get(position - 1).isLikeArticle();
+            if(isLike){
+                ((TopicsViewHolder) holder).like.setImageDrawable(context.getDrawable(R.drawable.like));
+            }else {
+                ((TopicsViewHolder) holder).like.setImageDrawable(context.getDrawable(R.drawable.unlike));
+            }
+
             ((TopicsViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    onTopicClickListener.onlikeClicked(view);
+                public void onClick(View v) {
+                    onTopicClickListener.onlikeClicked(v);
                 }
             });
             ((TopicsViewHolder) holder).comment.setOnClickListener(new View.OnClickListener() {
