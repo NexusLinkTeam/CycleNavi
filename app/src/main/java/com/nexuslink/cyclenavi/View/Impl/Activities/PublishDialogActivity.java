@@ -103,9 +103,8 @@ public class PublishDialogActivity extends AppCompatActivity {
                         .setMaxHeight(960) // 默认最大高度为960
                         .setQuality(60)
                         .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
-                        .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                        .build().compressToFile(fileold);
+                        .build()
+                        .compressToFile(fileold);
 
 
 
