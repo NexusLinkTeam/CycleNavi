@@ -20,6 +20,7 @@ import com.nexuslink.cyclenavi.Presenter.Interface.IForumPresenter;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.View.Interface.IForumView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -183,20 +184,19 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.d("MY_TAG","当前recycle中articleSize ："+""+ recyclerTopicsAdapter.getArticles().size());
-                Log.d("MY_TAG","lastVisibleItem ："+""+ lastVisibleItem);
-                Log.d("MY_TAG","recyclerTopicsAdapter.getItemCount() - 1 :"+ (recyclerTopicsAdapter.getItemCount() - 1));
-                if(recyclerTopicsAdapter.getArticles().size() > 0
-                        && newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1
-                        && !freshing){
-                    int lastArticleId = recyclerTopicsAdapter.getArticles().
-                            get(recyclerTopicsAdapter.getItemCount() - 3).getArticleId();
-                    Log.d("MY_TAG","条件通过");
-                    Log.d("MY_TAG","是否在正在刷新"+String.valueOf(freshing));
-                    Log.d("MY_TAG","最后一篇文章id"+String.valueOf(lastArticleId));
-                    freshing = true;
-                    presenter.obtainMoreArticles(lastArticleId);
+                if (recyclerTopicsAdapter != null) {
+                    if (recyclerTopicsAdapter.getArticles().size() > 0
+                            && newState == RecyclerView.SCROLL_STATE_IDLE
+                            && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1
+                            && !freshing) {
+                        int lastArticleId = recyclerTopicsAdapter.getArticles().
+                                get(recyclerTopicsAdapter.getItemCount() - 3).getArticleId();
+                        Log.d("MY_TAG", "条件通过");
+                        Log.d("MY_TAG", "是否在正在刷新" + String.valueOf(freshing));
+                        Log.d("MY_TAG", "最后一篇文章id" + String.valueOf(lastArticleId));
+                        freshing = true;
+                        presenter.obtainMoreArticles(lastArticleId);
+                    }
                 }
             }
 
