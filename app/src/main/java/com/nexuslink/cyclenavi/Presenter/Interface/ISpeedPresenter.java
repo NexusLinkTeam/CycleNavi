@@ -16,9 +16,8 @@ public interface ISpeedPresenter extends BasePresenter{
 
     void switchFragment();
 
-    void takePhoto(Context context);
 
-    Uri getUri();
-
+/*
     void scan(Context context);
+*/
 }

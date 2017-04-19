@@ -13,7 +13,6 @@ public interface IRegisterView {
 
     void showNetWorkWrong();
 
-
     void showErrorReason(EditText editText, String reason);
 
     void onFinishRegister();

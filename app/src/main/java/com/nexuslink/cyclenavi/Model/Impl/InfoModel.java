@@ -1,7 +1,6 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -10,27 +9,27 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.nexuslink.cyclenavi.Model.Interface.ISpeedModel;
+import com.nexuslink.cyclenavi.Model.Interface.IInfoModel;
+import com.nexuslink.cyclenavi.Presenter.Impl.InfoPresenterImpl;
+import com.nexuslink.cyclenavi.Presenter.Interface.IInfoPresenter;
 import com.nexuslink.cyclenavi.Util.MediaScanner;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static android.R.attr.path;
-
 /**
- * Created by Rye on 2017/3/28.
+ * Created by Rye on 2017/4/19.
  */
 
-public class SpeedModel implements ISpeedModel {
+public class InfoModel implements IInfoModel {
     private File path;
     private File newFile;
     private Uri uri;
-    @Override
-    public double currentSpeed() {
+    private IInfoPresenter infoPresenter;
 
-        return 0;
+    public InfoModel(IInfoPresenter presenter) {
+        this.infoPresenter = presenter;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class SpeedModel implements ISpeedModel {
         return uri;
     }
 
-    /*@Override
+    @Override
     public void addToGallery(Context context) {
         try {
             MediaStore.Images.Media.insertImage(context.getContentResolver(), newFile.getAbsolutePath(),"hello", null);
@@ -72,5 +71,5 @@ public class SpeedModel implements ISpeedModel {
         Log.d("TAG",newFile.getAbsolutePath());
         String[] mimeTypes = new String[]{MimeTypeMap.getSingleton().getMimeTypeFromExtension("png")};
         mediaScanner.scanFiles(filePaths, mimeTypes);
-    }*/
+    }
 }

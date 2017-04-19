@@ -1,18 +1,26 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -24,9 +32,13 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
+import com.nexuslink.cyclenavi.Presenter.Impl.InfoPresenterImpl;
+import com.nexuslink.cyclenavi.Presenter.Impl.SpeedPresenterImpl;
+import com.nexuslink.cyclenavi.Presenter.Interface.IInfoPresenter;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
+import com.nexuslink.cyclenavi.View.Interface.IInfoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +48,14 @@ import butterknife.OnClick;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 地图的fragment
  */
-public class InfoFragment extends Fragment  implements LocationSource, AMapLocationListener, View.OnClickListener {
+public class InfoFragment extends Fragment  implements LocationSource, AMapLocationListener, View.OnClickListener ,IInfoView{
+    private static final int NEED_CAMERA = 0;
+    private static final int TAKE_PHOTO = 1;
     private static InfoFragment instance;
     private MapView mapView;
     private AMap aMap;
@@ -48,10 +63,24 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     private LocationSource.OnLocationChangedListener locationChangedListener;
     private AMapLocationClient aMapLocationClient;
     private AMapLocationClientOption aMapLocationClientOption;
-    private ISpeedPresenter presenter;
+    private IInfoPresenter presenter;
+
+    @OnClick(R.id.btn_take_photo) void takePhoto(){
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ==  PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+            //权限是获得的
+            presenter.takePhoto(getContext());
+        }else {
+            //未获得权限
+            getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},NEED_CAMERA);
+        }
+    }
 
 
-    @OnClick(R.id.backtospeed) void back(){
+    /*@OnClick(R.id.backtospeed) void back(){
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getViewpager().setCurrentItem(0);
     }
@@ -61,7 +90,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
 
     @OnClick(R.id.search) void search(){
 
-    }
+    }*/
     double lastLongitude;
     double lastAltitude;
     double lastLatitude;
@@ -87,6 +116,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
         return view;
     }
     private void initView(View view, Bundle savedInstanceState) {
+        presenter = new InfoPresenterImpl(this);
         mapView = (MapView) view.findViewById(R.id.mapview);
         // 必须重写的方法
         mapView.onCreate(savedInstanceState);
@@ -243,8 +273,10 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
                 aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()),18));
                 break;
         }
+
     }
-    //再想想这个算法？？？？？
+
+    // TODO: 2017/4/19 待删除
     public static double getDistance(double lat1, double lng1, double lat2, double lng2)
     {
         double radLat1 = rad(lat1);
@@ -257,6 +289,30 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
         s = s * 6378.137;
         s = Math.round(s * 10000) / 10000;
         return s;
+    }
+
+
+    @Override
+    public void showCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri uri = presenter.getUri();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+        startActivityForResult(intent,TAKE_PHOTO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case TAKE_PHOTO:
+                    presenter.scan(getContext());
+                    //提示用户完成相册已保存
+                    Toast.makeText(getContext(),"图片已保存到我的“骑行相册",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
     }
 
 

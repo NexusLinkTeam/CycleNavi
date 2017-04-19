@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,6 +36,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private Context context;
     private List<FreshBean.ArticlesBean> articles;
     private onTopicClickListener onTopicClickListener;
+    private int lastPosition = 0;
 
     public List<FreshBean.ArticlesBean> getArticles() {
         return articles;
@@ -96,6 +99,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
                ((TopicsViewHolder) holder).img_relative.setVisibility(View.GONE);
            }
             ((TopicsViewHolder) holder).time.setText(articles.get(position - 1).getTime());
+            if(position > lastPosition){
+                showAnim(((TopicsViewHolder) holder).cardView,position);
+            }
 
             Boolean isLike = articles.get(position - 1).isLikeArticle();
             if(isLike){
@@ -135,6 +141,14 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    private void showAnim(final CardView cardView, int position) {
+        Log.d("POSITION",position+"Position");
+        Log.d("POSITION",lastPosition+"LastPosition");
+        Animation anim = AnimationUtils.loadAnimation(context,R.anim.my_anim);
+        cardView.setAnimation(anim);
+        lastPosition = position;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -160,9 +174,11 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         private ImageView like;
         private ImageView comment;
         private RelativeLayout img_relative;
+        private CardView cardView;
 
         public TopicsViewHolder(View itemView) {
             super(itemView);
+            cardView = (CardView) itemView.findViewById(R.id.item_view);
             img_relative = (RelativeLayout) itemView.findViewById(R.id.img_relative);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             content = (TextView) itemView.findViewById(R.id.user_content);

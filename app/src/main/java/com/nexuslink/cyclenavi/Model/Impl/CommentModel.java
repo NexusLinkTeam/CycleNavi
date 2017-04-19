@@ -1,9 +1,7 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
 import com.nexuslink.cyclenavi.Model.Interface.ICommentModel;
-import com.nexuslink.cyclenavi.Presenter.Impl.CommentPresenter;
 import com.nexuslink.cyclenavi.Presenter.Interface.ICommentPresenter;
-import com.nexuslink.cyclenavi.Util.RequestUtil;
 
 /**
  * Created by Rye on 2017/4/17.

@@ -264,9 +264,18 @@
                     android:background="?attr/colorPrimary"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottommenu"
+            android:layout_alignParentBottom="true"
+            >
+        </android.support.design.widget.BottomNavigationView>
         <com.nexuslink.cyclenavi.Util.MyViewPager
             android:id="@+id/viewpager_main"
             android:layout_below="@+id/app_bar"
+            android:layout_above="@id/bottom"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.nexuslink.cyclenavi.Util.MyViewPager>

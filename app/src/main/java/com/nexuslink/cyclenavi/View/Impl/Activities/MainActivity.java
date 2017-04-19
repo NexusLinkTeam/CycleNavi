@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.nexuslink.cyclenavi.Adapters.MainFragmentStatePagerAdapter;
@@ -26,6 +28,7 @@ import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.Constant;
 import com.nexuslink.cyclenavi.Util.IntentUtil;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.InfoFragment;
+import com.nexuslink.cyclenavi.View.Impl.Fragments.SensorFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.SpeedFragment;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
 
@@ -483,7 +486,7 @@ public class MainActivity extends AppCompatActivity
 */
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView{
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView {
 
     private IMainPresenter presenter;
 
@@ -498,6 +501,9 @@ public class MainActivity extends AppCompatActivity
     public void setSpeed(int speed) {
         Speed = speed;
     }
+
+    @BindView(R.id.bottom)
+    BottomNavigationView bottomNavigationView;
 
     @BindView(R.id.viewpager_main)
     ViewPager mainPager;
@@ -534,9 +540,44 @@ public class MainActivity extends AppCompatActivity
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new SpeedFragment());
         fragments.add(InfoFragment.getInstance());
+        fragments.add(new SensorFragment());
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.speed:
+                        mainPager.setCurrentItem(0);
+                        break;
+                    case R.id.map:
+                        mainPager.setCurrentItem(1);
+                        break;
+                    case R.id.sensor:
+                        mainPager.setCurrentItem(2);
+                        break;
+                }
+                return true;
+            }
+        });
+        mainPager.setOffscreenPageLimit(3);
         mainPager.setAdapter(new MainFragmentStatePagerAdapter(getSupportFragmentManager(),
                 fragments));
+        mainPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         View headerView = navigationView.getHeaderView(0);
         circleImageView = (CircleImageView) headerView.findViewById(R.id.person_image);
         text = (TextView) headerView.findViewById(R.id.name);
@@ -685,5 +726,4 @@ public class MainActivity extends AppCompatActivity
     public ViewPager getViewpager(){
         return mainPager;
     }
-
 }

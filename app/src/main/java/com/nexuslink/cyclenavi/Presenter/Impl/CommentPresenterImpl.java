@@ -10,10 +10,10 @@ import com.nexuslink.cyclenavi.View.Interface.ICommentView;
  * Created by Rye on 2017/4/17.
  */
 
-public class CommentPresenter implements ICommentPresenter {
+public class CommentPresenterImpl implements ICommentPresenter {
     private ICommentView commentView;
     private ICommentModel commentModel;
-    public CommentPresenter(ICommentView commentView) {
+    public CommentPresenterImpl(ICommentView commentView) {
         this.commentView =  commentView;
         commentModel = new CommentModel(this);
     }

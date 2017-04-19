@@ -18,5 +18,4 @@ public interface ISpeedView extends BaseView<ISpeedPresenter> {
 
     void showPage2();
 
-    void showCamera();
 }

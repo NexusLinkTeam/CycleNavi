@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.nexuslink.cyclenavi.Adapters.CommentAdapter;
 import com.nexuslink.cyclenavi.Model.JavaBean.CommentBean;
-import com.nexuslink.cyclenavi.Presenter.Impl.CommentPresenter;
+import com.nexuslink.cyclenavi.Presenter.Impl.CommentPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.ICommentPresenter;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.SpUtil;
@@ -80,7 +80,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         emptyInfo = (TextView) findViewById(R.id.emptyInfo);
         commentRecycle = (RecyclerView) findViewById(R.id.recycle_comment);
         commentRecycle.setLayoutManager(linearLayoutManager = new LinearLayoutManager(this));
-        presenter = new CommentPresenter(this);
+        presenter = new CommentPresenterImpl(this);
         presenter.obtainCommentList();
     }
 

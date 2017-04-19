@@ -13,6 +13,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -63,13 +64,13 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     @BindView(R.id.panView)
     DashboardView panView;
     @BindView(R.id.play)
-    RelativeLayout btnPlay;
+    FloatingActionButton btnPlay;
     @BindView(R.id.pause)
-    RelativeLayout btnPause;
+    FloatingActionButton btnPause;
     @BindView(R.id.timer)
     Chronometer textTimer;
-    @BindView(R.id.position)
-    TextView position;
+  /*  @BindView(R.id.position)
+    TextView position;*/
 
     @OnClick(R.id.play) void play(){
         Snackbar.make(panView,"开始骑行”",Snackbar.LENGTH_SHORT)
@@ -81,11 +82,11 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         presenter.pauseCycle();
     }
 
-    @OnClick(R.id.btn_map) void map(){
+   /* @OnClick(R.id.btn_map) void map(){
         IntentUtil.startActivity(getActivity(),DataActivity.class);
-    }
+    }*/
 
-    @OnClick(R.id.btn_take_photo) void takePhoto(){
+    /*@OnClick(R.id.btn_take_photo) void takePhoto(){
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 ==  PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CAMERA)
@@ -97,7 +98,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
             getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE},NEED_CAMERA);
         }
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -182,15 +183,15 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         parent.showPage(1);
     }
 
-    @Override
+    /*@Override
     public void showCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri uri = presenter.getUri();
         intent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
         startActivityForResult(intent,TAKE_PHOTO);
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -198,7 +199,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
             switch (requestCode){
                 case TAKE_PHOTO:
                     presenter.scan(getContext());
-                    /*new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("图片已保存到我的“骑行相册”")
+                    new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("图片已保存到我的“骑行相册”")
                             .setPositiveButton("好的", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -209,7 +210,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                         }
-                    }).show();*/
+                    }).show();
                     Snackbar.make(panView,"图片已保存到我的“骑行相册”",Snackbar.LENGTH_SHORT)
                     .setAction("分享", new View.OnClickListener() {
                         @Override
@@ -220,7 +221,7 @@ public class SpeedFragment extends Fragment implements ISpeedView {
                     break;
             }
         }
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -244,7 +245,9 @@ public class SpeedFragment extends Fragment implements ISpeedView {
 
     public void setCurrentPosition(String aoiName) {
         if(aoiName != null){
+/*
             position.setText(aoiName);
+*/
         }
     }
 

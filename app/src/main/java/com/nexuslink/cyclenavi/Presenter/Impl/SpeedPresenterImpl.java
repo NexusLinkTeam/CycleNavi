@@ -56,19 +56,10 @@ public class SpeedPresenterImpl implements ISpeedPresenter {
         speedView.showPage2();
     }
 
-    @Override
-    public Uri getUri() {
-        return speedModel.getUri();
-    }
-
-    @Override
+   /* @Override
     public void scan(Context context) {
         speedModel.addToGallery(context);
-    }
+    }*/
 
-    @Override
-    public void takePhoto(Context context) {
-        speedModel.storePic(context);
-        speedView.showCamera();
-    }
+
 }
