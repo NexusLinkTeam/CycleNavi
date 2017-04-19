@@ -27,6 +27,7 @@ import com.nexuslink.cyclenavi.Presenter.Interface.IMainPresenter;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.Constant;
 import com.nexuslink.cyclenavi.Util.IntentUtil;
+import com.nexuslink.cyclenavi.View.Impl.Fragments.HorizentalFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.InfoFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.SensorFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.SpeedFragment;
@@ -540,7 +541,7 @@ public class MainActivity extends AppCompatActivity
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new SpeedFragment());
         fragments.add(InfoFragment.getInstance());
-        fragments.add(new SensorFragment());
+        fragments.add(new HorizentalFragment());
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override

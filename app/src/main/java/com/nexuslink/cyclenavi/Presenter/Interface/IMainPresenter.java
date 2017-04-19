@@ -17,6 +17,4 @@ public interface IMainPresenter extends BasePresenter{
 
     void finishLogin();
 
-
-
 }

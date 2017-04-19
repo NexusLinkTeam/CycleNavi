@@ -77,12 +77,12 @@ public class HorizentalFragment extends Fragment implements IHorizentalView,Sens
 
     @Override
     public void setHight(String height) {
-        textPress.setText("当前海拔\n"+ height + "米");
+        textPress.setText("当前海拔\n"+ (int)Double.parseDouble(height) + "米");
     }
 
     @Override
     public void setPress(float sPV) {
-        textHeight.setText("当前大气压强\n"+sPV+"帕");
+        textHeight.setText("当前大气压强\n"+(int)sPV+"帕");
     }
 
     @Override
