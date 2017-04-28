@@ -68,8 +68,8 @@
                 />
             <android.support.design.widget.FloatingActionButton
                 android:visibility="gone"
-                android:id="@+id/pause"
-                android:src="@drawable/ic_pause"
+                android:id="@+id/finish"
+                android:src="@drawable/ic_finish"
                 android:layout_margin="16dp"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"

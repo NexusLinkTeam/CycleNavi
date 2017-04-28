@@ -1,45 +1,26 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.Presenter.Impl.SpeedPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Util.IntentUtil;
 import com.nexuslink.cyclenavi.Util.TimeUtil;
-import com.nexuslink.cyclenavi.View.Impl.Activities.DataActivity;
-import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
+import com.nexuslink.cyclenavi.View.Interface.IFragCommunicate;
 import com.nexuslink.cyclenavi.View.Interface.ISpeedView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * 主要是展示仪表盘的一个fragment
@@ -47,80 +28,48 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class SpeedFragment extends Fragment implements ISpeedView {
-    private static final int NEED_CAMERA = 0;
-    private static final int TAKE_PHOTO = 1;
+    private static final float MAX_SIZE = 40;
+    private static final int PAN_TEXT_SIZE = 35;
     private ISpeedPresenter presenter;
-    private SpeedFragment instance;
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int speed = intent.getIntExtra("data",0);
-            Log.d("TAG4",speed + "");
-            panView.setPercent(speed * 100 / 40);
-        }
-    };
+    private IFragCommunicate call;
 
     @BindView(R.id.panView)
-    DashboardView panView;
+    DashboardView panView;//仪表盘
     @BindView(R.id.play)
-    FloatingActionButton btnPlay;
-    @BindView(R.id.pause)
-    FloatingActionButton btnPause;
+    FloatingActionButton btnPlay;//开始按钮
+    @BindView(R.id.finish)
+    FloatingActionButton btnFinish;//完成按钮
     @BindView(R.id.timer)
-    Chronometer textTimer;
-  /*  @BindView(R.id.position)
-    TextView position;*/
+    Chronometer textTimer;//计时器
 
     @OnClick(R.id.play) void play(){
+        // TODO: 2017/4/28  讯飞语音“开始骑行”
         Snackbar.make(panView,"开始骑行”",Snackbar.LENGTH_SHORT)
                 .show();
-        presenter.startCycle();
+        //=====================================
+        presenter.startCycle();// =====> 最终执行showStart()
     }
 
-    @OnClick(R.id.pause) void pause(){
+    @OnClick(R.id.finish) void pause(){
         presenter.pauseCycle();
     }
-
-   /* @OnClick(R.id.btn_map) void map(){
-        IntentUtil.startActivity(getActivity(),DataActivity.class);
-    }*/
-
-    /*@OnClick(R.id.btn_take_photo) void takePhoto(){
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                ==  PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_GRANTED) {
-            //权限是获得的
-            presenter.takePhoto(getContext());
-        }else {
-            //未获得权限
-            getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE},NEED_CAMERA);
-        }
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_speed, container, false);
         ButterKnife.bind(this,view);
-        IntentFilter filter = new IntentFilter("com.nexuslink.cyclenavi.speed");
-        getContext().registerReceiver(broadcastReceiver, filter);
         initData();
         return view;
     }
 
-    public SpeedFragment getInstance() {
-        if(instance == null){
-            instance = new SpeedFragment();
-        }
-        return instance;
-    }
+    /**
+     * 初始化数据
+     */
 
     private void initData() {
-        textTimer.setTag(1);
-        panView.setTextSize(35);
+        panView.setTextSize(PAN_TEXT_SIZE);
+        panView.setMaxNum(MAX_SIZE);
         panView.setUnit("公里/小时");
         presenter = new SpeedPresenterImpl(this);
     }
@@ -131,129 +80,55 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     }
 
     @Override
-    public void showCurrentSpeed(int persent) {
-        panView.setPercent(persent);
+    public void showFinish() {
+
     }
 
-    @Override
-    public void showPause() {
-        startVisible(true);
-        new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("选择你的操作")
-                .setPositiveButton("完成", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //完成的逻辑
-
-                    }
-                }).setNegativeButton("休息一会儿", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startVisible(false);
-                textTimer.setTag(0);
-                textTimer.stop();
-            }
-        }).show();
-    }
+    /**
+     * 开始按钮点击后执行的方法，
+     * 通知infofragment开始绘制与计算
+     * 按钮切换
+     * 计时开始
+     */
 
     @Override
     public void showStart() {
+        call.startDrawAndCalculate();
         startVisible(true);
-        if(textTimer.getTag().equals(0)){
-            new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("要继续开始吗？")
-                    .setPositiveButton("是的", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            timeStart();
-                        }
-                    }).setNegativeButton("再休息一会儿", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            }).show();
-        }else {
-            timeStart();
-        }
+        timeStart();
     }
 
-    @Override
-    public void showPage2() {
-        //交给parent处理吧
-        MainActivity parent  = (MainActivity) getActivity();
-        parent.showPage(1);
-    }
-
-    /*@Override
-    public void showCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri uri = presenter.getUri();
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
-        startActivityForResult(intent,TAKE_PHOTO);
-    }*/
-
-   /* @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-                case TAKE_PHOTO:
-                    presenter.scan(getContext());
-                    new AlertDialog.Builder(getContext()).setTitle("提示").setMessage("图片已保存到我的“骑行相册”")
-                            .setPositiveButton("好的", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    timeStart();
-                                }
-                            }).setNegativeButton("分享", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    }).show();
-                    Snackbar.make(panView,"图片已保存到我的“骑行相册”",Snackbar.LENGTH_SHORT)
-                    .setAction("分享", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //分享的操作
-                        }
-                    }).show();
-                    break;
-            }
-        }
-    }*/
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+    /**
+     * 开始记录时间
+     */
 
     private void timeStart() {
         textTimer.setBase(TimeUtil.convertStrTimeToLong(textTimer.getText().toString()));
         textTimer.start();//开始计时
     }
 
+    /**
+     * 设置开始与结束时按钮图标变化
+     * @param b 播放按钮是否可见
+     */
+
     private void startVisible(boolean b) {
         if(b){
             btnPlay.setVisibility(View.GONE);
-            btnPause.setVisibility(View.VISIBLE);
+            btnFinish.setVisibility(View.VISIBLE);
         }else {
             btnPlay.setVisibility(View.VISIBLE);
-            btnPause.setVisibility(View.GONE);
-        }
-    }
-
-    public void setCurrentPosition(String aoiName) {
-        if(aoiName != null){
-/*
-            position.setText(aoiName);
-*/
+            btnFinish.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getContext().unregisterReceiver(broadcastReceiver);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        call = (IFragCommunicate) context;
+    }
+
+    public void showSpeed(float speed) {
+        panView.setPercent((int) (speed / MAX_SIZE * 100));
     }
 }

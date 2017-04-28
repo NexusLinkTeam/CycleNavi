@@ -1,6 +1,5 @@
 package com.nexuslink.cyclenavi.View.Interface;
 
-import com.nexuslink.cyclenavi.BasePresenter;
 import com.nexuslink.cyclenavi.BaseView;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 
@@ -10,12 +9,7 @@ import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 
 public interface ISpeedView extends BaseView<ISpeedPresenter> {
 
-    void showCurrentSpeed(int persent);
-
-    void showPause();
+    void showFinish();
 
     void showStart();
-
-    void showPage2();
-
 }

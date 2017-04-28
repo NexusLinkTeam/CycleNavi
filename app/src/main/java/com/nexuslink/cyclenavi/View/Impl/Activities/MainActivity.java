@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.nexuslink.cyclenavi.Adapters.MainFragmentStatePagerAdapter;
@@ -29,8 +28,8 @@ import com.nexuslink.cyclenavi.Util.Constant;
 import com.nexuslink.cyclenavi.Util.IntentUtil;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.HorizentalFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.InfoFragment;
-import com.nexuslink.cyclenavi.View.Impl.Fragments.SensorFragment;
 import com.nexuslink.cyclenavi.View.Impl.Fragments.SpeedFragment;
+import com.nexuslink.cyclenavi.View.Interface.IFragCommunicate;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
 
 import java.util.ArrayList;
@@ -487,13 +486,16 @@ public class MainActivity extends AppCompatActivity
 */
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView, IFragCommunicate {
 
     private IMainPresenter presenter;
 
     private TextView text;
     private CircleImageView circleImageView;
     private int Speed;
+    private SpeedFragment speedFragment;
+    private InfoFragment infoFragment;
+    private HorizentalFragment horizentalFragment;
 
     public int getSpeed() {
         return Speed;
@@ -539,9 +541,13 @@ public class MainActivity extends AppCompatActivity
 
     private void initView() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new SpeedFragment());
-        fragments.add(InfoFragment.getInstance());
-        fragments.add(new HorizentalFragment());
+        speedFragment = new SpeedFragment();
+        infoFragment = new InfoFragment();
+        horizentalFragment = new HorizentalFragment();
+        fragments.add(speedFragment);
+        fragments.add(infoFragment);
+        fragments.add(horizentalFragment);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -720,11 +726,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void showPage(int position){
-        mainPager.setCurrentItem(position);
-    }
-
     public ViewPager getViewpager(){
         return mainPager;
+    }
+
+    @Override
+    public void startDrawAndCalculate() {
+        infoFragment.cancelTag();
+    }
+
+    @Override
+    public void sendSpeed(float speed) {
+        speedFragment.showSpeed(speed);
     }
 }
