@@ -10,7 +10,6 @@ import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreHitsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.HitsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
-import com.nexuslink.cyclenavi.Model.JavaBean.MoreBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.RegisterBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.SaveNameBean;
@@ -89,8 +88,8 @@ public interface ICycleNaviService {
 
     @FormUrlEncoded
     @POST("/cycle/api/article/like")
-    Call<LikeBean> like(@Field("userId") String userId,
-                        @Field("articleId") String articleId );
+    io.reactivex.Observable<LikeBean> like(@Field("userId") String userId,
+                                           @Field("articleId") String articleId );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/comment")

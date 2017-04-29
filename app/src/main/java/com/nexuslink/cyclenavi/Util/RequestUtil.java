@@ -2,6 +2,7 @@ package com.nexuslink.cyclenavi.Util;
 
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
 
 import retrofit2.Call;
 
@@ -20,5 +21,8 @@ public class RequestUtil {
 
     public static Call<FreshBean> fresh(String userId) {
         return service.fresh(userId);
+    }
+    public static io.reactivex.Observable<LikeBean> like(String userId, String articleId) {
+        return service.like(10+"","56");
     }
 }

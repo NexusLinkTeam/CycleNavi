@@ -58,7 +58,17 @@ public class ForumPresenter implements IForumPresenter {
     }
 
     @Override
-    public void likeThis() {
+    public void likeSuccess() {
+        forumView.successToast("点赞成功");
+    }
 
+    @Override
+    public void likeFail(Throwable throwable) {
+        forumView.failToast(throwable);
+    }
+
+    @Override
+    public void likeThis(String userId, String articleId) {
+        forumModel.like(userId, articleId);
     }
 }

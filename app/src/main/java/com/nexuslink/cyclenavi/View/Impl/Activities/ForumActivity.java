@@ -2,14 +2,13 @@ package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,9 +19,9 @@ import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.Presenter.Impl.ForumPresenter;
 import com.nexuslink.cyclenavi.Presenter.Interface.IForumPresenter;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 import com.nexuslink.cyclenavi.View.Interface.IForumView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,132 +39,10 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
-       /* EventBus.getDefault().register(this);*/
-
         presenter = new ForumPresenter(this);
-
         initView();
         initData();
         initEvent();
-
-       /* articles = new ArrayList<>();
-
-        recyclerTopics.setLayoutManager(linearLayoutManager = new LinearLayoutManager(ForumActivity.this));
-
-        recyclerTopicsAdapter = new RecycleTopicsAdapter(ForumActivity.this,articles);
-
-        recyclerTopics.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if(recyclerTopicsAdapter.getArticles().size() > 0 && newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == recyclerTopicsAdapter.getItemCount() - 1){
-                    showNextPage(recyclerTopicsAdapter.getArticles().get(articles.size() - 1).getArticleId());
-                }
-
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                //获取最后一个能见的位置
-                lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-            }
-        });
-
-        //创建时加载数据
-        swipeRefreshLayout.setRefreshing(true);
-        getArticles(recyclerTopics);
-        swipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    private void showNextPage(final int last) {
-        RetrofitWrapper.getInstance().create(ICycleNaviService.class).more("10",last+"").enqueue(new Callback<FreshBean>() {
-            @Override
-            public void onResponse(Call<FreshBean> call, Response<FreshBean> response) {
-                if(response.code() == 200){
-                    if(response.body().getArticles().size() == 0){
-                       //到底了
-                        
-                    }else {
-                        recyclerTopicsAdapter.loadMore(response.body().getArticles());
-                    }
-                }else {
-                    Toast.makeText(ForumActivity.this,"请求失败",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FreshBean> call, Throwable t) {
-
-            }
-        });
-    }
-    private void getArticles(final RecyclerView recyclerTopics) {
-        //获得UserID
-        RetrofitWrapper.getInstance().create(ICycleNaviService.class).fresh("10").enqueue(new Callback<FreshBean>() {
-            @Override
-            public void onResponse(Call<FreshBean> call, final Response<FreshBean> response) {
-                if(response.code() == 200){
-                    //请求成功，关闭刷新
-                    swipeRefreshLayout.setRefreshing(false);
-                    recyclerTopicsAdapter.loadMore(response.body().getArticles());
-                    recyclerTopicsAdapter.setOnTopicClickListener(new RecycleTopicsAdapter.onTopicClickListener() {
-                        @Override
-                        public void onlikeClicked(View view) {
-                            ImageView imageView = (ImageView) view;
-                            imageView.setImageDrawable(getDrawable(R.drawable.like));
-                        }
-
-                        @Override
-                        public void onCommentClicke() {
-                            Intent intent = new Intent(ForumActivity.this,CommentActivity.class);
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onOthersPhotoClick() {
-                            //区分
-                            Intent intent = new Intent(ForumActivity.this,PersonalActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    recyclerTopics.setAdapter(recyclerTopicsAdapter);
-                }else {
-                    Toast.makeText(ForumActivity.this,"请求失败",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FreshBean> call, Throwable t) {
-
-            }
-        });
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home){
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onFreshEvent(FreshEvent messageEvent){
-        getArticles(recyclerTopics);
-    }
-
-    @Override
-    public void onRefresh() {
-        recyclerTopicsAdapter.removeAll();
-        getArticles(recyclerTopics);
-    }*/
     }
 
     @Override
@@ -195,9 +72,6 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
                             && !freshing) {
                         int lastArticleId = recyclerTopicsAdapter.getArticles().
                                 get(recyclerTopicsAdapter.getItemCount() - 3).getArticleId();
-                        Log.d("MY_TAG", "条件通过");
-                        Log.d("MY_TAG", "是否在正在刷新" + String.valueOf(freshing));
-                        Log.d("MY_TAG", "最后一篇文章id" + String.valueOf(lastArticleId));
                         freshing = true;
                         presenter.obtainMoreArticles(lastArticleId);
                     }
@@ -213,18 +87,13 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     private void initView() {
-
-        //初始化toolbar
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle(R.string.forum);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
         recyclerTopics = (RecyclerView) findViewById(R.id.recycle_topics);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiftFresh);
-
-
         swipeRefreshLayout.setRefreshing(true);
         presenter.obtainArticles();
     }
@@ -262,12 +131,23 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     @Override
-    public void onlikeClicked(View view) {
-        // // TODO: 2017/4/17 点赞的request
+    public void successToast(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failToast(Throwable throwable) {
+        Toast.makeText(this,throwable.toString(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onlikeClicked(View view,int position) {
+        // TODO: 2017/4/17 点赞的request
         if(!presenter.checkIsLike()){
             ImageView imageView = (ImageView) view;
             imageView.setImageDrawable(getDrawable(R.drawable.like));
-            presenter.likeThis();
+            int articleId = recyclerTopicsAdapter.getArticles().get(position).getArticleId();
+            presenter.likeThis(SpUtil.getUserId(this),String.valueOf(articleId));
         }else {
             Toast.makeText(this,"已经赞过了呢",Toast.LENGTH_SHORT).show();
         }
@@ -281,7 +161,6 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
 
     @Override
     public void onOthersPhotoClick() {
-        //区分
         Intent intent = new Intent(ForumActivity.this,PersonalActivity.class);
         startActivity(intent);
     }

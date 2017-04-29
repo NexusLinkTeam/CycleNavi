@@ -18,4 +18,9 @@ public interface IForumView {
     void showError(String message);
 
     Context getThis();
+
+
+    void successToast(String message);
+
+    void failToast(Throwable throwable);
 }

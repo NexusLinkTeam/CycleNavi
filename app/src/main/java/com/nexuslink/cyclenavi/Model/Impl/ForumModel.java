@@ -1,17 +1,20 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.Interface.IForumModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
 import com.nexuslink.cyclenavi.Presenter.Interface.IForumPresenter;
 import com.nexuslink.cyclenavi.Util.RequestUtil;
-import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.Util.SpUtil;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +73,24 @@ public class ForumModel implements IForumModel {
                 presenter.requestFailed(t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void like(String userId, String articleId) {
+        RequestUtil.like(userId,articleId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<LikeBean>() {
+                    @Override
+                    public void accept(@NonNull LikeBean likeBean) throws Exception {
+                        presenter.likeSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        presenter.likeFail(throwable);
+                    }
+                });
     }
 
     private String getUserIdFromSp() {

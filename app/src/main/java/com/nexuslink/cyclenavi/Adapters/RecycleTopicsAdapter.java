@@ -3,7 +3,6 @@ package com.nexuslink.cyclenavi.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.View.Impl.Activities.ForumActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.LookUpActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.PublishDialogActivity;
 
@@ -75,7 +73,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof TopicsViewHolder){
             Log.d("MY_TAG",articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
@@ -113,7 +111,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TopicsViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onTopicClickListener.onlikeClicked(v);
+                    onTopicClickListener.onlikeClicked(v,holder.getLayoutPosition());
                 }
             });
             ((TopicsViewHolder) holder).comment.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +217,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public interface onTopicClickListener{
-        void onlikeClicked(View view);
+        void onlikeClicked(View view, int position);
         void onCommentClicke();
         void onOthersPhotoClick();
     }
