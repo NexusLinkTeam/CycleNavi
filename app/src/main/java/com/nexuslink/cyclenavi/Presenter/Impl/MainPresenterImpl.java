@@ -5,10 +5,8 @@ import android.content.Context;
 import com.nexuslink.cyclenavi.Model.Impl.MainModel;
 import com.nexuslink.cyclenavi.Model.Interface.IMainModel;
 import com.nexuslink.cyclenavi.Presenter.Interface.IMainPresenter;
-import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
+import com.nexuslink.cyclenavi.Util.LoginStatus;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -28,30 +26,38 @@ public class MainPresenterImpl implements IMainPresenter {
 
     @Override
     public void start() {
+        // TODO: 2017/5/8 缓存下来
+        //获取侧滑栏的图片
         //这里要请求图片=====================================待完成===================================
       /*  iMainView.showUserPhoto(iMainModel.getPersonalImage());*/
     }
 
+    //
     @Override
     public void exit() {
         iMainView.showExitDialog();
     }
 
+    // 判断是否登录，完成相应的跳转
     @Override
     public void moreUserInfo(Context context) {
-        Boolean isLogin = context.getSharedPreferences("CycleNaviData",MODE_PRIVATE).
-                getBoolean("isUserLogin",false);
-
-        if(isLogin){
+        // TODO: 2017/5/8 工具类完成检验（待测试）
+        if(LoginStatus.check()){
             iMainView.showPersonZoom();
         }else {
             iMainView.showPrepareToLogin();
         }
     }
 
+    //完成登陆时
     @Override
     public void finishLogin() {
         iMainView.showStatus();
+    }
+
+    @Override
+    public void requestUserPic() {
+
     }
 
 }

@@ -26,6 +26,10 @@ import com.nexuslink.cyclenavi.Util.MyHistoryManager;
 
 import java.util.List;
 
+/**
+ * 暂时放弃
+ */
+
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, Inputtips.InputtipsListener {
     private EditText edit;
     private RecyclerView recyclerViewHistory;

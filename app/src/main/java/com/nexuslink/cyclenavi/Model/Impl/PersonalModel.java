@@ -31,15 +31,18 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PersonalModel implements IPersonalModel {
 
+    //？？？？
     @Override
     public void cancelLoginStatus(PersonalActivity persoanalActivity) {
         persoanalActivity.getSharedPreferences("CycleNaviData",MODE_PRIVATE).edit().putBoolean("isUserLogin",false)
                 .putString("name", persoanalActivity.getString(R.string.without_login)).apply();
     }
 
+    //上传头像
     @Override
     public void upLoad(Uri uri, PersonalActivity context) {
         File fileold = new File(FileManager.getRealPathFromURI(uri,context));
+
         File file = new CompressHelper.Builder(context)
                 .setMaxWidth(720)  // 默认最大宽度为720
                 .setMaxHeight(960) // 默认最大高度为960
@@ -51,6 +54,7 @@ public class PersonalModel implements IPersonalModel {
                 .compressToFile(fileold);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("image/png"), file);
+        Log.d("TAG789",uri.toString());
 
         MultipartBody.Part userImg =
                 MultipartBody.Part.createFormData("userImg",file.getName(),requestFile);

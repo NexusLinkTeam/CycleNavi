@@ -147,7 +147,7 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
             ImageView imageView = (ImageView) view;
             imageView.setImageDrawable(getDrawable(R.drawable.like));
             int articleId = recyclerTopicsAdapter.getArticles().get(position).getArticleId();
-            presenter.likeThis(SpUtil.getUserId(this),String.valueOf(articleId));
+            presenter.likeThis(SpUtil.getUserId(),articleId);
         }else {
             Toast.makeText(this,"已经赞过了呢",Toast.LENGTH_SHORT).show();
         }

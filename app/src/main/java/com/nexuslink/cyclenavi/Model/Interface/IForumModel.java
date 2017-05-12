@@ -9,5 +9,5 @@ public interface IForumModel {
 
     void requestMoreArticles(int lastArticleId);
 
-    void like(String userId, String articleId);
+    void like(int userId, int articleId);
 }

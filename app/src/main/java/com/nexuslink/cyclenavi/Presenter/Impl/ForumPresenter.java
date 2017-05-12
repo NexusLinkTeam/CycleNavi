@@ -68,7 +68,7 @@ public class ForumPresenter implements IForumPresenter {
     }
 
     @Override
-    public void likeThis(String userId, String articleId) {
+    public void likeThis(int userId, int articleId) {
         forumModel.like(userId, articleId);
     }
 }

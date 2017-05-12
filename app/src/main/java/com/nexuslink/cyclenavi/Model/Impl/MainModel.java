@@ -9,9 +9,7 @@ import com.nexuslink.cyclenavi.Model.Interface.IMainModel;
  */
 
 public class MainModel implements IMainModel {
-    /**
-     * 第二次登录时会获得缓存的头像
-     */
+    //获得用户信息
     @Override
     public Drawable getPersonalImage() {
 

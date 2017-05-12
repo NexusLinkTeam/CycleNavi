@@ -15,8 +15,6 @@ import com.nexuslink.cyclenavi.Model.JavaBean.RegisterBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.SaveNameBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
 
-import java.util.List;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -53,14 +51,14 @@ public interface ICycleNaviService {
     //论坛相关接口
     @FormUrlEncoded
     @POST("/cycle/api/article/publish")
-    Call<PublishBean> publish(@Field("userId") String userId,
+    Call<PublishBean> publish(@Field("userId") int userId,
                               @Field("content") String content);
 
     @Multipart
     @POST("/cycle/api/img/article")
     Call<ArticleBean> article(@Part("articleId") RequestBody articleId,
-                                @Part("userId") RequestBody userId,
-                              @Part List<MultipartBody.Part> articleImgs);
+                              @Part("userId") RequestBody userId,
+                              @Part MultipartBody.Part articleImgs);
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getArticle")
@@ -69,37 +67,37 @@ public interface ICycleNaviService {
 
     @FormUrlEncoded
     @POST("/cycle/api/article/fresh")
-    Call<FreshBean> fresh(@Field("userId") String userId );
+    Call<FreshBean> fresh(@Field("userId") int userId );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/more")
-    Call<FreshBean> more(@Field("userId")String userId, @Field("lastArticleId") String lastArticleId);
+    Call<FreshBean> more(@Field("userId")int userId, @Field("lastArticleId") String lastArticleId);
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getHis")
-    Call<HitsBean> getHis(@Field("userId") String userId,
+    Call<HitsBean> getHis(@Field("userId") int userId,
                           @Field("writerId") String writerId);
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getHisMore")
-    Call<GetMoreHitsBean> getHisMore(@Field("userId") String userId,
-                                     @Field("writerId") String writerId,
-                                     @Field("lastArticleId") String lastArticleId );
+    Call<GetMoreHitsBean> getHisMore(@Field("userId") int userId,
+                                     @Field("writerId") int writerId,
+                                     @Field("lastArticleId") int lastArticleId );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/like")
-    io.reactivex.Observable<LikeBean> like(@Field("userId") String userId,
-                                           @Field("articleId") String articleId );
+    io.reactivex.Observable<LikeBean> like(@Field("userId") int userId,
+                                           @Field("articleId") int articleId );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/comment")
-    Call<CommentBean> comment(@Field("userId") String userId,
-                              @Field("articleId") String articleId,
+    Call<CommentBean> comment(@Field("userId") int userId,
+                              @Field("articleId") int articleId,
                               @Field("content") String content );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getComments")
-    Call<GetCommentsBean> getComments (@Field("articleId") String articleId );
+    Call<GetCommentsBean> getComments (@Field("articleId") int articleId );
 
     @FormUrlEncoded
     @POST("/cycle/api/article/getMoreComments")

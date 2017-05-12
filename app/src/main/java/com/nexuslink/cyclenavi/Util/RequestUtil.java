@@ -15,14 +15,14 @@ public class RequestUtil {
     static {
         service = RetrofitWrapper.getInstance().create(ICycleNaviService.class);
     }
-    public static Call<FreshBean> more(String userId, String lastArticleId){
+    public static Call<FreshBean> more(int userId, String lastArticleId){
         return service.more(userId, lastArticleId);
     }
 
-    public static Call<FreshBean> fresh(String userId) {
+    public static Call<FreshBean> fresh(int userId) {
         return service.fresh(userId);
     }
-    public static io.reactivex.Observable<LikeBean> like(String userId, String articleId) {
-        return service.like(10+"","56");
+    public static io.reactivex.Observable<LikeBean> like(int userId, int articleId) {
+        return service.like(10,56);
     }
 }

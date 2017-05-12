@@ -1,53 +1,48 @@
 package com.nexuslink.cyclenavi.Model.Impl;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.support.v4.content.FileProvider;
-
+import com.nexuslink.cyclenavi.Extra.Net.ApiService;
+import com.nexuslink.cyclenavi.Extra.Net.RetrofitClient;
 import com.nexuslink.cyclenavi.Model.Interface.ISpeedModel;
+import com.nexuslink.cyclenavi.Model.JavaBean.SaveRouteBean;
+import com.nexuslink.cyclenavi.Util.ToastUtil;
 
-import java.io.File;
-import java.io.IOException;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * Created by Rye on 2017/3/28.
  */
 
 public class SpeedModel implements ISpeedModel {
-    private File path;
-    private File newFile;
-    private Uri uri;
     @Override
-    public double currentSpeed() {
-        return 0;
+    // TODO: 2017/5/8 待测试
+    //上传骑行路线
+    public void uploadCurrent(RequestBody userId,
+                                RequestBody totalTime,
+                                RequestBody date,
+                                RequestBody routeLine,
+                                RequestBody speedList,
+                                RequestBody heightList,
+                                MultipartBody.Part picture){
+        RetrofitClient.create(ApiService.class)
+                .saveRout(userId,totalTime,date,routeLine,speedList,heightList,picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<SaveRouteBean>() {
+                    @Override
+                    public void accept(@NonNull SaveRouteBean saveRouteBean) throws Exception {
+                        ToastUtil.shortToast("上传行车记录");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        ToastUtil.shortToast(throwable.toString());
+                    }
+                });
     }
 
-    @Override
-    public void storePic(Context context) {
-        path = new File(Environment.getExternalStorageDirectory()+"/骑车帮");
-        if(!path.exists()){
-            path.mkdir();
-        }
-
-        newFile = new File(path,"Img_"+System.currentTimeMillis()+".png");
-        if(!newFile.exists()){
-            try {
-                newFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if(Build.VERSION.SDK_INT >= 24){
-            uri = FileProvider.getUriForFile(context,"com.nexuslink.cyclenavi.fileprovider",newFile);
-        }else {
-            uri = Uri.fromFile(newFile);
-        }
-    }
-
-    @Override
-    public Uri getUri() {
-        return uri;
-    }
 }

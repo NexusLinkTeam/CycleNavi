@@ -1,10 +1,8 @@
 package com.nexuslink.cyclenavi.Presenter.Interface;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.nexuslink.cyclenavi.BasePresenter;
-import com.nexuslink.cyclenavi.View.Impl.Activities.MainActivity;
 
 /**
  * Created by Rye on 2017/1/18.
@@ -17,4 +15,6 @@ public interface IMainPresenter extends BasePresenter{
 
     void finishLogin();
 
+    //已经登录，请求获得用户头像，Glide自带缓存是否冲突
+    void requestUserPic();
 }

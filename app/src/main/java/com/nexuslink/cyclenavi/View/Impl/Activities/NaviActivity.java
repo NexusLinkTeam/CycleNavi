@@ -1,7 +1,7 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -9,8 +9,6 @@ import com.amap.api.navi.AMapHudView;
 import com.amap.api.navi.AMapHudViewListener;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
-import com.amap.api.navi.AMapNaviView;
-import com.amap.api.navi.AMapNaviViewListener;
 import com.amap.api.navi.enums.NaviType;
 import com.amap.api.navi.model.AMapLaneInfo;
 import com.amap.api.navi.model.AMapNaviCross;
@@ -25,6 +23,10 @@ import com.amap.api.navi.model.NaviLatLng;
 import com.autonavi.tbt.NaviStaticInfo;
 import com.autonavi.tbt.TrafficFacilityInfo;
 import com.nexuslink.cyclenavi.R;
+
+/**
+ * 暂时放弃
+ */
 
 public class NaviActivity extends AppCompatActivity implements  AMapNaviListener, AMapHudViewListener {
     private AMapHudView aMapNaviView;

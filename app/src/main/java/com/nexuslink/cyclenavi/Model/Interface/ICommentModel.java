@@ -5,9 +5,9 @@ package com.nexuslink.cyclenavi.Model.Interface;
  */
 
 public interface ICommentModel {
-    void requestCommentList();
+    void requestCommentList(int articleId);
 
-    void requestNewComment();
+    void requestNewComment(int userId,int articleId, String content);
 
-    void requestMoreComment();
+    void requestMoreComment(int userId,int lastCommentFloor);
 }

@@ -19,11 +19,13 @@ public class HorizentalPresenterImpl implements IHorizentalPresenter {
         this.horizentalView.setPresenter(this);
     }
 
+    //????
     @Override
     public void start() {
 
     }
 
+    //计算角度
     @Override
     public void caculateDegree(SensorEvent sensorEvent) {
 
@@ -35,6 +37,7 @@ public class HorizentalPresenterImpl implements IHorizentalPresenter {
         horizentalView.showDegree(gradient);
     }
 
+    //计算压强
     @Override
     public void caculatePress(SensorEvent sensorEvent) {
         float sPV = sensorEvent.values[0];

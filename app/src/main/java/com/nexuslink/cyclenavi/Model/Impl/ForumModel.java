@@ -3,6 +3,8 @@ package com.nexuslink.cyclenavi.Model.Impl;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.nexuslink.cyclenavi.Extra.Net.ApiService;
+import com.nexuslink.cyclenavi.Extra.Net.RetrofitClient;
 import com.nexuslink.cyclenavi.Model.Interface.IForumModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
@@ -29,14 +31,17 @@ public class ForumModel implements IForumModel {
         this.presenter = presenter;
     }
 
+
+    //请求文章
     @Override
     public void requestArticles() {
-        String userId = getUserIdFromSp();
-        RequestUtil.fresh(String.valueOf(userId)).enqueue(new Callback<FreshBean>() {
+        //直接通过MyApplication的静态方法取值
+        int userId = SpUtil.getUserId();
+        RequestUtil.fresh(userId).enqueue(new Callback<FreshBean>() {
 
             @Override
             public void onResponse(Call<FreshBean> call, Response<FreshBean> response) {
-                if(response.body().getCode() == 200){
+                if(response.body() != null && response.body().getCode() == 200){
                     List<FreshBean.ArticlesBean> articles = response.body().getArticles();
                     presenter.reciveArticles(articles);
                 }
@@ -49,9 +54,11 @@ public class ForumModel implements IForumModel {
         });
     }
 
+    //请求更多文章
     @Override
     public void requestMoreArticles(int lastArticleId) {
-        String userId = getUserIdFromSp();
+        //直接通过MyApplication的静态方法取值
+        int userId = SpUtil.getUserId();
         Log.d("MY_TAG","Model层收到即将请求信息");
         RequestUtil.more(userId,
                 String.valueOf(lastArticleId)).enqueue(new Callback<FreshBean>() {
@@ -65,6 +72,7 @@ public class ForumModel implements IForumModel {
                     Log.d("MY_TAG","获得说说"+articles.size()+"条");
                     presenter.reciveMoreArticles(articles);
                 }else {
+
                 }
             }
 
@@ -75,9 +83,11 @@ public class ForumModel implements IForumModel {
         });
     }
 
+    //文章点赞
     @Override
-    public void like(String userId, String articleId) {
-        RequestUtil.like(userId,articleId)
+    public void like(int userId, int articleId) {
+        RetrofitClient.create (ApiService.class)
+                .like(userId,articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<LikeBean>() {
@@ -91,11 +101,5 @@ public class ForumModel implements IForumModel {
                         presenter.likeFail(throwable);
                     }
                 });
-    }
-
-    private String getUserIdFromSp() {
-        //测试
-        Log.d("My_TAG",SpUtil.getUserId(presenter.getContext()));
-        return SpUtil.getUserId(presenter.getContext());
     }
 }

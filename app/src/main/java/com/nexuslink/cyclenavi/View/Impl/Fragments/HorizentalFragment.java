@@ -32,6 +32,7 @@ public class HorizentalFragment extends Fragment implements IHorizentalView,Sens
 
     private SensorManager sensorManager;
     private float[] gravity = new float[3];
+    private StringBuilder heights = new StringBuilder("");
 
     private IHorizentalPresenter presenter;
 
@@ -131,5 +132,9 @@ public class HorizentalFragment extends Fragment implements IHorizentalView,Sens
     public void onDestroy() {
         super.onDestroy();
         sensorManager.unregisterListener(this);
+    }
+
+    public String getHeights() {
+        return heights.toString();
     }
 }

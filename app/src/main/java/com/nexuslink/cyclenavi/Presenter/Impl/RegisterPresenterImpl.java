@@ -19,6 +19,7 @@ public class RegisterPresenterImpl implements IRegisterPresenter {
         registerModel = new RegisterModel();
     }
 
+    //注册
     @Override
     public void registerNewUser(EditText userName, EditText userPassword, EditText rePassword, EditText emergencyPhone) {
         if(registerModel.checkoutUserInfo(userName, userPassword, rePassword, emergencyPhone,iRegisterView)){
@@ -30,27 +31,32 @@ public class RegisterPresenterImpl implements IRegisterPresenter {
         }
         }
 
+    //注册成功时
     @Override
     public void registerOk() {
         iRegisterView.onCancelRegisterProgress();
         iRegisterView.onFinishRegister();
     }
 
+    //注册发生错误
     @Override
     public void registerWrong() {
         iRegisterView.onCancelRegisterProgress();
     }
 
+    //信息错误
     @Override
     public void infoError(EditText editText, String reason) {
         iRegisterView.showErrorReason(editText,reason);
     }
 
+    //网络错误
     @Override
     public void netWorkWrong() {
         iRegisterView.showNetWorkWrong();
     }
 
+    //电话号码错误
     @Override
     public void phoneNumWrong() {
         iRegisterView.showPhoneNumWrong();

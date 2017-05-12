@@ -21,11 +21,13 @@ public class PersonalPresenterImpl implements IPersonalPresenter {
         this.personalView = personalActivity;
     }
 
+    //注销
     @Override
     public void logout() {
         iLogoutModel.cancelLoginStatus(personalView.getCurrentActivity());
     }
 
+    //上传用户头像
     @Override
     public void upLoadPhoto(Uri uri, PersonalActivity personalActivity) {
         iLogoutModel.upLoad(uri,personalActivity);

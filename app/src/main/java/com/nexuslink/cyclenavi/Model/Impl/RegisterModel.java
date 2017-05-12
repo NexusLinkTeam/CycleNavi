@@ -22,8 +22,8 @@ import retrofit2.Response;
 public class RegisterModel implements IRegisterModel {
     private RegisterPresenterImpl registerPresenterImpl;
 
+    //注册新用户
     @Override
-
     public void registerNew(String username, String userPassword, String PhoneNum, IRegisterView iRegisterView) {
         registerPresenterImpl = new RegisterPresenterImpl(iRegisterView);
 
@@ -48,6 +48,7 @@ public class RegisterModel implements IRegisterModel {
                 });
     }
 
+    //检查用户数据
     @Override
     public boolean checkoutUserInfo(EditText userName, EditText userPassword, EditText rePassword, EditText emergencyPhone
     , IRegisterView iRegisterView) {
@@ -84,6 +85,12 @@ public class RegisterModel implements IRegisterModel {
         return phoneNum.length() == 11;
     }
 
+    /**
+     * 检查密码是否相等
+     * @param s
+     * @param s1
+     * @return 相等返回true，不相等返回false
+     */
     private boolean isPasswordEqual(String s, String s1) {
         if (s.equals(s1)){
             return true;
@@ -92,7 +99,6 @@ public class RegisterModel implements IRegisterModel {
     }
 
     private boolean isPasswordValid(String password) {
-
         return  password.length() >= 6;
     }
 }

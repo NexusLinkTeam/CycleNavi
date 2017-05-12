@@ -1,5 +1,6 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,13 +15,21 @@ import com.anderson.dashboardview.view.DashboardView;
 import com.nexuslink.cyclenavi.Presenter.Impl.SpeedPresenterImpl;
 import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 import com.nexuslink.cyclenavi.Util.TimeUtil;
 import com.nexuslink.cyclenavi.View.Interface.IFragCommunicate;
 import com.nexuslink.cyclenavi.View.Interface.ISpeedView;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * 主要是展示仪表盘的一个fragment
@@ -46,12 +55,13 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         // TODO: 2017/4/28  讯飞语音“开始骑行”
         Snackbar.make(panView,"开始骑行”",Snackbar.LENGTH_SHORT)
                 .show();
-        //=====================================
         presenter.startCycle();// =====> 最终执行showStart()
     }
 
+    //pause 等于 finish
     @OnClick(R.id.finish) void pause(){
-        presenter.pauseCycle();
+        //去截屏
+        call.getShortCut();
     }
 
     @Override
@@ -130,5 +140,36 @@ public class SpeedFragment extends Fragment implements ISpeedView {
 
     public void showSpeed(float speed) {
         panView.setPercent((int) (speed / MAX_SIZE * 100));
+    }
+
+    public String getTotalTime() {
+/*
+        ToastUtil.shortToast(textTimer.getText().toString());
+*/
+        return textTimer.getText().toString();
+    }
+
+    public void upload(File file) {
+        int userId = SpUtil.getUserId();
+        String totalTime = call.getTotalTime();
+        // 待测试
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String date = dateFormat.format(new Date(System.currentTimeMillis()));
+        String routLine = "";
+        String speeds = call.getSpeeds();
+        String heights = call.getHeights();
+
+        // 资源就绪，开始请求
+        //在此状态下未登录状态，sp有数据
+        RequestBody userIdBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(userId));
+        RequestBody totalTimeBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(totalTime));
+        RequestBody dateBody = RequestBody.create(MediaType.parse("multipart/form-data"),date);
+        RequestBody routLineBody = RequestBody.create(MediaType.parse("multipart/form-data"),routLine);
+        RequestBody speedsBody = RequestBody.create(MediaType.parse("multipart/form-data"),speeds);
+        RequestBody heightsBody = RequestBody.create(MediaType.parse("multipart/form-data"),heights);
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"),file);
+        MultipartBody.Part pic = MultipartBody.Part.createFormData("picture",file.getName(),requestFile);
+        presenter.pauseCycle(userIdBody,totalTimeBody,dateBody,routLineBody,speedsBody,heightsBody,pic);
     }
 }

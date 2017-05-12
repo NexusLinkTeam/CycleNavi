@@ -1,6 +1,7 @@
 package com.nexuslink.cyclenavi;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 
@@ -9,9 +10,16 @@ import com.facebook.stetho.Stetho;
  */
 
 public class MyApplication extends Application{
+    public static final String TAG = "My_TAG_RUN";
+    private static Context mContext;
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = getApplicationContext();
         Stetho.initializeWithDefaults(this);
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 }

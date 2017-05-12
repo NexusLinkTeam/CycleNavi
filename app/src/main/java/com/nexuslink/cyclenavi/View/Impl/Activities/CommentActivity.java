@@ -50,7 +50,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 super.onScrollStateChanged(recyclerView, newState);
                 if(commentAdapter.getItemCount() > 0 && newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisible == commentAdapter.getItemCount()){
-                    presenter.obtainMoreComment();
+                    presenter.obtainMoreComment(56,40);//测试
                 }
             }
 
@@ -81,13 +81,13 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         commentRecycle = (RecyclerView) findViewById(R.id.recycle_comment);
         commentRecycle.setLayoutManager(linearLayoutManager = new LinearLayoutManager(this));
         presenter = new CommentPresenterImpl(this);
-        presenter.obtainCommentList();
+        presenter.obtainCommentList(56);//测试
     }
 
     @Override
     public void onClick(View v) {
         String messageSend = messageEdit.getText().toString();
-        String userId = SpUtil.getUserId(this);
+        int userId = SpUtil.getUserId();
         // TODO: 2017/4/17 Sp保存在点击Item时文章id
         String articleId = "";
         presenter.addComment(messageSend,userId,articleId);

@@ -3,6 +3,8 @@ package com.nexuslink.cyclenavi.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.nexuslink.cyclenavi.MyApplication;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -11,16 +13,33 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SpUtil {
 
-    public static String getUserName(Context context){
-        return context.getSharedPreferences("CycleNaviData", MODE_PRIVATE).getString("name","name");
+    private static final String SP_NAME = "CycleNaviData";
+    private static final String NAME = "name";
+    private static final String NAME_DEFAULT = "name";
+    private static final String IS_LOGIN = "isUserLogin";
+    private static final String UID = "uid";
+    private static final int UID_DEFAULT = -1;
+
+    public static String getUserName(){
+        return MyApplication
+                .getContext()
+                .getSharedPreferences(SP_NAME, MODE_PRIVATE)
+                .getString(NAME,NAME_DEFAULT);
     }
-    public static String getUserId(Context context){
-        //未登录会报错
-        return context.getSharedPreferences("CycleNaviData", MODE_PRIVATE).getString("uid","");
+
+    //UID被设置为int,之前版本会报错
+    public static int getUserId(){
+        return MyApplication
+                .getContext()
+                .getSharedPreferences(SP_NAME, MODE_PRIVATE)
+                .getInt(UID,UID_DEFAULT);
+
     }
-    public static Boolean getLoginStatus(Context context){
-        //未登录会报错
-        return context.getSharedPreferences("CycleNaviData", MODE_PRIVATE).getBoolean("isUserLogin",false);
+    public static Boolean getLoginStatus(){
+        return MyApplication
+                .getContext()
+                .getSharedPreferences(SP_NAME, MODE_PRIVATE)
+                .getBoolean(IS_LOGIN,false);
     }
 
 
@@ -37,9 +56,9 @@ public class SpUtil {
                 putString("name",userName).apply();
     }
 
-    public static void setUserId(Context context,String s) {
+    public static void setUserId(Context context,int s) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("CycleNaviData",MODE_PRIVATE);
         sharedPreferences.edit().
-        putString("uid",s).apply();
+        putInt("uid",s).apply();
     }
 }

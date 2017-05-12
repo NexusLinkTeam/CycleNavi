@@ -25,7 +25,7 @@ public interface IForumPresenter {
 
     boolean checkIsLike();
 
-    void likeThis(String userId, String articleId);
+    void likeThis(int userId, int articleId);
 
     void likeSuccess();
 

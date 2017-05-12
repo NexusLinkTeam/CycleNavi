@@ -4,14 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -29,7 +26,6 @@ import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.Util.SpUtil;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -219,7 +215,7 @@ public class LoginActivity extends AppCompatActivity{
                         if(response.body().getCode() == 200){
                             SpUtil.setLoginStatus(LoginActivity.this,true);
                             SpUtil.setUserName(LoginActivity.this,mEmail);
-                            SpUtil.setUserId(LoginActivity.this,String.valueOf(response.body().getUid()));
+                            SpUtil.setUserId(LoginActivity.this,response.body().getUid());
                             mAuthTask = null;
                             showProgress(false);
                             setResult(RESULT_OK);
@@ -227,7 +223,7 @@ public class LoginActivity extends AppCompatActivity{
                         }else {
                             SpUtil.setLoginStatus(LoginActivity.this,false);
                             SpUtil.setUserName(LoginActivity.this,"name");
-                            SpUtil.setUserId(LoginActivity.this,"");
+                            SpUtil.setUserId(LoginActivity.this,-1);
                             mAuthTask = null;
                             showProgress(false);
                             mPasswordView.setError(getString(R.string.error_incorrect_password));

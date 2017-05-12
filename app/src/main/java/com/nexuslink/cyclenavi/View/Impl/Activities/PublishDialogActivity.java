@@ -2,9 +2,8 @@ package com.nexuslink.cyclenavi.View.Impl.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,6 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.ArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Util.FileManager;
 import com.nexuslink.cyclenavi.Util.FreshEvent;
 import com.nexuslink.cyclenavi.Util.GlideImageLoader;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
@@ -45,6 +43,7 @@ import retrofit2.Response;
 
 
 public class PublishDialogActivity extends AppCompatActivity {
+    private static final String FORM_DATA = "multipart/form-data";
     private static final int IMAGE_PICKER =  0;
     private PhotosPrepareAdapter adpter;
     private RecyclerView recyclerPhotos;
@@ -97,8 +96,8 @@ public class PublishDialogActivity extends AppCompatActivity {
         if(images != null ) {
             Log.d("TAG_123",images.size() + images.get(0).path);
             List<MultipartBody.Part> list = new ArrayList<>();
-            for (ImageItem image : images){
-                File fileold = new File(image.path);
+           /* for (ImageItem image : images){*/
+                File fileold = new File(images.get(0).path);
                 File file = new CompressHelper.Builder(this)
                         .setMaxWidth(720)  // 默认最大宽度为720
                         .setMaxHeight(960) // 默认最大高度为960
@@ -114,15 +113,16 @@ public class PublishDialogActivity extends AppCompatActivity {
                 MultipartBody.Part img =
                         MultipartBody.Part.createFormData("articleImgs",file.getName(),requestFile);
                 list.add(img);
-            }
+          /*  }*/
 
             RequestBody aId =
                     RequestBody.create(MediaType.parse("multipart/form-data"),articleId+"");
 
             RequestBody uid =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), SpUtil.getUserId(this));
+                    RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(SpUtil.getUserId()));
 
-            RetrofitWrapper.getInstance().create(ICycleNaviService.class).article(aId,uid,list).enqueue(new Callback<ArticleBean>() {
+
+            RetrofitWrapper.getInstance().create(ICycleNaviService.class).article(aId,uid,img).enqueue(new Callback<ArticleBean>() {
                 @Override
                 public void onResponse(Call<ArticleBean> call, Response<ArticleBean> response) {
                     Log.d("TAG_123",response.code()+"");
@@ -139,8 +139,8 @@ public class PublishDialogActivity extends AppCompatActivity {
     }
 
     private void upLoadText(TextView text) {
-        Log.d("MY_TAG","上传前"+SpUtil.getUserId(this));
-        RetrofitWrapper.getInstance().create(ICycleNaviService.class).publish(SpUtil.getUserId(this),text.getText().toString()).enqueue(new Callback<PublishBean>() {
+        Log.d("MY_TAG","上传前"+SpUtil.getUserId());
+        RetrofitWrapper.getInstance().create(ICycleNaviService.class).publish(SpUtil.getUserId(),text.getText().toString()).enqueue(new Callback<PublishBean>() {
             @Override
             public void onResponse(Call<PublishBean> call, Response<PublishBean> response) {
                 upLoadImages(images,response.body().getArticleId());

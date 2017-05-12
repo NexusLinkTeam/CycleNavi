@@ -5,9 +5,9 @@ package com.nexuslink.cyclenavi.Presenter.Interface;
  */
 
 public interface ICommentPresenter {
-    void obtainCommentList();
+    void obtainCommentList(int articleId);
 
-    void addComment(String messageSend, String userId, String articleId);
+    void addComment(String messageSend, int userId, String articleId);
 
-    void obtainMoreComment();
+    void obtainMoreComment(int articleId, int lastCommentFloor);
 }

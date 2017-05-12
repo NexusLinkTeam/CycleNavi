@@ -25,7 +25,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
         personalPresenterImpl = new PersonalPresenterImpl(this);
         setContentView(R.layout.activity_personal);
         TextView name = (TextView) findViewById(R.id.name_text);
-        name.setText(SpUtil.getUserName(this));
+        name.setText(SpUtil.getUserName());
         ImageView back = (ImageView) findViewById(R.id.back);
         TextView logout = (TextView) findViewById(R.id.logout);
         ImageView photo = (ImageView) findViewById(R.id.photo);
