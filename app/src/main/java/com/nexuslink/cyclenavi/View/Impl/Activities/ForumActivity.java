@@ -165,8 +165,9 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     @Override
-    public void onCommentClicke() {
+    public void onCommentClicke(int articleId) {
         Intent intent = new Intent(ForumActivity.this,CommentActivity.class);
+        intent.putExtra("articleId",articleId);
         startActivity(intent);
     }
 

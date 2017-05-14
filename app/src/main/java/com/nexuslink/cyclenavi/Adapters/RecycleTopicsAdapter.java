@@ -122,7 +122,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TopicsViewHolder) holder).comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onTopicClickListener.onCommentClicke();
+                    onTopicClickListener.onCommentClicke(articles.get(position - 1).getArticleId());
                 }
             });
             ((TopicsViewHolder) holder).userPhoto.setOnClickListener(new View.OnClickListener() {
@@ -233,7 +233,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public interface onTopicClickListener{
         void onlikeClicked(TextView like,View view, int position);
-        void onCommentClicke();
+        void onCommentClicke(int articleId);
         void onOthersPhotoClick();
     }
 

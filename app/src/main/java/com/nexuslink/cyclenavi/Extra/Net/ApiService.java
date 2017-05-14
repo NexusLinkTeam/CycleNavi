@@ -5,7 +5,6 @@ import com.nexuslink.cyclenavi.Model.JavaBean.CommentBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetCommentsBean;
-import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreComments;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreHitsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfoBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.HitsBean;
@@ -122,7 +121,7 @@ public interface ApiService {
     //获得特定文章的更多评论（测试成功）
     @FormUrlEncoded
     @POST("/cycle/api/article/getMoreComments")
-    Observable<GetMoreComments> getMoreComments (@Field("articleId") int userId,
+    Observable<GetCommentsBean> getMoreComments (@Field("articleId") int userId,
                                                  @Field("lastCommentFloor") int lastCommentFloor);
 
     //点赞(测试成功)

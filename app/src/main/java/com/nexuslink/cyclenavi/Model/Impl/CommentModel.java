@@ -7,7 +7,6 @@ import com.nexuslink.cyclenavi.Extra.Net.RetrofitClient;
 import com.nexuslink.cyclenavi.Model.Interface.ICommentModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.CommentBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetCommentsBean;
-import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreComments;
 import com.nexuslink.cyclenavi.Presenter.Interface.ICommentPresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,12 +39,12 @@ public class CommentModel implements ICommentModel {
                 .subscribe(new Consumer<GetCommentsBean>() {
                     @Override
                     public void accept(@NonNull GetCommentsBean getCommentsBean) throws Exception {
-                        Log.d(TAG, "accept: " + getCommentsBean.getComments().get(0).getArticleId());
+                        commentPresenter.responseSuccess(getCommentsBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        Log.d(TAG, "accept: " + throwable.getMessage());
+                        Log.d(TAG, "accept:请求评论 " + throwable.getMessage());
                     }
                 });
 
@@ -62,6 +61,7 @@ public class CommentModel implements ICommentModel {
                     @Override
                     public void accept(@NonNull CommentBean commentBean) throws Exception {
                         Log.d(TAG, "accept: commentId" + commentBean.getCommentId());
+                        commentPresenter.newResponse();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -78,11 +78,17 @@ public class CommentModel implements ICommentModel {
                 .getMoreComments(userId, lastCommentFloor)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<GetMoreComments>() {
+                .subscribe(new Consumer<GetCommentsBean>() {
                     @Override
-                    public void accept(@NonNull GetMoreComments getMoreComments) throws Exception {
-                        Log.d(TAG, "accept: commentId:更多" + getMoreComments.getComments().get(0).getCommentId());
+                    public void accept(@NonNull GetCommentsBean getCommentsBean) throws Exception {
+                        commentPresenter.moreResponse(getCommentsBean);
                     }
+
+                   /* @Override
+                    public void accept(@NonNull GetMoreComments getMoreComments) throws Exception {
+                        commentPresenter.moreResponse(getMoreComments);
+                        Log.d(TAG, "accept: commentId:更多" + getMoreComments.getComments().get(0).getCommentId());
+                    }*/
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {

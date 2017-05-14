@@ -2,13 +2,16 @@ package com.nexuslink.cyclenavi.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.nexuslink.cyclenavi.Model.JavaBean.CommentBean;
+import com.bumptech.glide.Glide;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetCommentsBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.View.Impl.Activities.CommentActivity;
 
 import java.util.List;
 
@@ -19,9 +22,12 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPLE_LOAD = 1;
     private static final int TYPLE_NORMAL = 0;
+    private static final String TAG = "MY_TAG";
     private Context context;
-    public CommentAdapter(Context context, List<CommentBean> commentBeanList) {
+    private List<GetCommentsBean.CommentsBean> commentBeanList;
+    public CommentAdapter(Context context, List<GetCommentsBean.CommentsBean> commentBeanList) {
         this.context = context;
+        this.commentBeanList = commentBeanList;
     }
 
     @Override
@@ -47,18 +53,34 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        if(holder instanceof CommentViewHolder){
+            ((CommentViewHolder) holder).replay.setText(commentBeanList.get(position).getContent());
+            ((CommentViewHolder) holder).name.setText(commentBeanList.get(position).getUser().getUserName());
+            Log.d(TAG, "onBindViewHolder: " + commentBeanList.get(position).getUser().getUserImg());
+            Glide.with(context).load("http://120.77.87.78:8080/cycle/image/" + commentBeanList.get(position).getUser().getUserImg()).into(((CommentViewHolder) holder).imageUser);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return commentBeanList.size() + 1;
+    }
+
+    public void addComments(List<GetCommentsBean.CommentsBean> comments) {
+        commentBeanList.addAll(comments);
+        notifyDataSetChanged();
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder{
+        private ImageView imageUser;
+        private TextView name;
+        private TextView replay;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+            imageUser = (ImageView) itemView.findViewById(R.id.img_user);
+            name = (TextView) itemView.findViewById(R.id.text_name);
+            replay = (TextView) itemView.findViewById(R.id.text_replay);
         }
     }
 
