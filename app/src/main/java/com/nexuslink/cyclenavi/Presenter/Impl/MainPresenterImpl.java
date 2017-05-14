@@ -4,8 +4,11 @@ import android.content.Context;
 
 import com.nexuslink.cyclenavi.Model.Impl.MainModel;
 import com.nexuslink.cyclenavi.Model.Interface.IMainModel;
+import com.nexuslink.cyclenavi.Model.JavaBean.BaseBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfoBean;
 import com.nexuslink.cyclenavi.Presenter.Interface.IMainPresenter;
 import com.nexuslink.cyclenavi.Util.LoginStatus;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 import com.nexuslink.cyclenavi.View.Interface.IMainView;
 
 
@@ -24,12 +27,21 @@ public class MainPresenterImpl implements IMainPresenter {
         iMainModel = new MainModel();
     }
 
-    @Override
+    /*@Override
     public void start() {
         // TODO: 2017/5/8 缓存下来
         //获取侧滑栏的图片
         //这里要请求图片=====================================待完成===================================
-      /*  iMainView.showUserPhoto(iMainModel.getPersonalImage());*/
+      *//*  iMainView.showUserPhoto(iMainModel.getPersonalImage());*//*
+    }*/
+
+    @Override
+    public void responseSuccess(BaseBean bean) {
+        if(bean instanceof GetUserInfoBean){
+            String image = ((GetUserInfoBean) bean).getUser().getUserImg();
+            SpUtil.setUserImage(image);
+            iMainView.loadView(image);
+        }
     }
 
     //
@@ -57,7 +69,7 @@ public class MainPresenterImpl implements IMainPresenter {
 
     @Override
     public void requestUserPic() {
-
+        iMainModel.getPersonalImage(this);
     }
 
 }

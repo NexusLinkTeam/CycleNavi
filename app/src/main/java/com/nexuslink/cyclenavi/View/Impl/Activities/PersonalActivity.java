@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +17,7 @@ import com.nexuslink.cyclenavi.View.Interface.IPersonalView;
 
 
 public class PersonalActivity extends AppCompatActivity implements View.OnClickListener,IPersonalView {
+    private static final int RESULT_BACK = 10;
     private PersonalPresenterImpl personalPresenterImpl;
 
     @Override
@@ -88,5 +89,11 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public PersonalActivity getCurrentActivity() {
         return this;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_BACK);
+        finish();
     }
 }

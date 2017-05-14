@@ -16,8 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.R;
+import com.nexuslink.cyclenavi.Util.SpUtil;
 import com.nexuslink.cyclenavi.View.Impl.Activities.LookUpActivity;
 import com.nexuslink.cyclenavi.View.Impl.Activities.PublishDialogActivity;
 
@@ -79,7 +81,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
             // todo：头像可以做个缓存
-            Glide.with(context).load(articles.get(position-1).getUser().getUserImg()).into(((TopicsViewHolder) holder).userPhoto);
+            Glide.with(context).load(articles.get(position-1).getUser().getUserImg())
+                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(((TopicsViewHolder) holder).userPhoto);
 
             List<String> list = articles.get(position - 1).getArticleImgs();
            if(list.size() != 0){
@@ -129,6 +133,9 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
         }else if(holder instanceof PublishViewHolder){
+            //sp
+            Glide.with(context).load(SpUtil.getUserImage()).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(((PublishViewHolder) holder).image);
             ((PublishViewHolder) holder).publish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -190,11 +197,14 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private class PublishViewHolder extends RecyclerView.ViewHolder {
+        private ImageView image;
         private CardView publish;
 
         public PublishViewHolder(View itemView) {
             super(itemView);
             publish = (CardView) itemView.findViewById(R.id.publish);
+            //可以试试Sp去缓存图片的地址
+            image = (ImageView) itemView.findViewById(R.id.header_imageView);
         }
     }
 

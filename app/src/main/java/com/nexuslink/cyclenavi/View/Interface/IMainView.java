@@ -19,6 +19,5 @@ public interface IMainView extends BaseView<IMainPresenter>{
     void showUserPhoto(String personalImage);
 
 
-
-
+    void loadView(String image);
 }

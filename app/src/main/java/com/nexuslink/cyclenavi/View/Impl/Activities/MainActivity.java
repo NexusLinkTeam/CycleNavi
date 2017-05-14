@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nexuslink.cyclenavi.Adapters.MainFragmentStatePagerAdapter;
 import com.nexuslink.cyclenavi.MyApplication;
 import com.nexuslink.cyclenavi.Presenter.Impl.MainPresenterImpl;
@@ -46,6 +47,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,IMainView, IFragCommunicate {
 
+    private static final int LOGIN = 0;
+    private static final int PERSON = 1;
+    private static final int RESULT_BACK = 10;
     private IMainPresenter presenter;
     private TextView text;
     private CircleImageView circleImageView;
@@ -181,13 +185,21 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.msg:
-                IntentUtil.startActivity(MainActivity.this, MsgActivity.class);
+                if(!SpUtil.getLoginStatus()){
+                    IntentUtil.startActivity(MainActivity.this, LoginActivity.class);
+                }else {
+                    IntentUtil.startActivity(MainActivity.this, MsgActivity.class);
+                }
                 break;
             case R.id.favorite:
                 IntentUtil.startActivity(MainActivity.this, FavouriteActivity.class);
                 break;
             case R.id.forum:
-                IntentUtil.startActivity(MainActivity.this, ForumActivity.class);
+                if(!SpUtil.getLoginStatus()){
+                    IntentUtil.startActivity(MainActivity.this, LoginActivity.class);
+                }else {
+                    IntentUtil.startActivity(MainActivity.this, ForumActivity.class);
+                }
                 break;
             case R.id.about:
                 IntentUtil.startActivity(MainActivity.this, AboutActivity.class);
@@ -212,7 +224,18 @@ public class MainActivity extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.finishLogin();
+            switch (requestCode){
+                case LOGIN:
+                    presenter.requestUserPic();
+                    presenter.finishLogin();
+                    break;
+                case PERSON:
+                    text.setText("未登录");
+                    circleImageView.setImageResource(R.drawable.default_photo);
+                    break;
+            }
+        }else if (resultCode == RESULT_BACK){
+            presenter.requestUserPic();
         }
     }
 
@@ -237,14 +260,14 @@ public class MainActivity extends AppCompatActivity
     //处于登录状态完成的跳转
     @Override
     public void showPersonZoom() {
-        IntentUtil.startActivityForResult(MainActivity.this,PersonalActivity.class,1);
+        IntentUtil.startActivityForResult(MainActivity.this,PersonalActivity.class,PERSON);
     }
 
 
     //处于未登录状态完成的跳转
     @Override
     public void showPrepareToLogin() {
-        IntentUtil.startActivityForResult(MainActivity.this,LoginActivity.class,0);
+        IntentUtil.startActivityForResult(MainActivity.this,LoginActivity.class,LOGIN);
     }
 
 
@@ -257,13 +280,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showUserPhoto(String personalImage) {
-        Glide.with(this).load(personalImage).into(circleImageView);
+        Glide.with(this).load(personalImage).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(circleImageView);
     }
 
-    /*//？？？
-    public ViewPager getViewpager(){
-        return mainPager;
-    }*/
+    @Override
+    public void loadView(String image) {
+        Glide.with(this).load(image).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(circleImageView);
+    }
 
     //infoFragment开始绘制与计算
     @Override

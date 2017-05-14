@@ -7,6 +7,7 @@ import com.nexuslink.cyclenavi.Model.JavaBean.GetArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetCommentsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreComments;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreHitsBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfoBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.HitsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
@@ -129,4 +130,8 @@ public interface ApiService {
     @POST("/cycle/api/article/like")
     Observable<LikeBean> like(@Field("userId") int userId,
                               @Field("articleId") int articleId );
+
+    @FormUrlEncoded
+    @POST("/cycle/api/user/getUser")
+    Observable<GetUserInfoBean> getUserInfo (@Field("uid") int uid);
 }

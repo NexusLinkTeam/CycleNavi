@@ -35,6 +35,7 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     private IForumPresenter presenter;
     private Boolean freshing = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

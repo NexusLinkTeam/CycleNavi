@@ -17,4 +17,6 @@ public interface IMainPresenter extends BasePresenter{
 
     //已经登录，请求获得用户头像，Glide自带缓存是否冲突
     void requestUserPic();
+
+
 }

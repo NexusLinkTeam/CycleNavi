@@ -44,8 +44,8 @@ public class PersonalModel implements IPersonalModel {
         File fileold = new File(FileManager.getRealPathFromURI(uri,context));
 
         File file = new CompressHelper.Builder(context)
-                .setMaxWidth(720)  // 默认最大宽度为720
-                .setMaxHeight(960) // 默认最大高度为960
+                .setMaxWidth(150)  // 默认最大宽度为720
+                .setMaxHeight(150) // 默认最大高度为960
                 .setQuality(40)
                 .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置压缩为png格式
                 .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
@@ -60,7 +60,7 @@ public class PersonalModel implements IPersonalModel {
                 MultipartBody.Part.createFormData("userImg",file.getName(),requestFile);
 
         RequestBody uid =
-                RequestBody.create(MediaType.parse("multipart/form-data"),context.getSharedPreferences("CycleNaviData",MODE_PRIVATE).getString("uid","0"));
+                RequestBody.create(MediaType.parse("multipart/form-data"), "10");
 
         RetrofitWrapper.getInstance().create(ICycleNaviService.class).upLoad(uid,userImg).enqueue(new Callback<UpLoadBean>() {
             @Override

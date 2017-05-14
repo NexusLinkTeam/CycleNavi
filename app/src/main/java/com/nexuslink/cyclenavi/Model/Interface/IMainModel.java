@@ -1,11 +1,11 @@
 package com.nexuslink.cyclenavi.Model.Interface;
 
-import android.graphics.drawable.Drawable;
+import com.nexuslink.cyclenavi.BasePresenter;
 
 /**
  * Created by Rye on 2017/3/28.
  */
 
 public interface IMainModel {
-    Drawable getPersonalImage();
+    void getPersonalImage(BasePresenter call);
 }

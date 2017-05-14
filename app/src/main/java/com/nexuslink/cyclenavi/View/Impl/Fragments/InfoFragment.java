@@ -219,7 +219,7 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
             call.sendSpeed(aMapLocation.getSpeed());
             addPolylinesWithGradientColors(new LatLng(latitude,longitude));//绘制
             speeds.append(aMapLocation.getSpeed()+",");
-            heights.append(aMapLocation.getLongitude()+",");
+            heights.append(aMapLocation.getAltitude()+",");
         }
         assert locationChangedListener != null;
         locationChangedListener.onLocationChanged(aMapLocation);

@@ -19,12 +19,6 @@ public class HorizentalPresenterImpl implements IHorizentalPresenter {
         this.horizentalView.setPresenter(this);
     }
 
-    //????
-    @Override
-    public void start() {
-
-    }
-
     //计算角度
     @Override
     public void caculateDegree(SensorEvent sensorEvent) {
