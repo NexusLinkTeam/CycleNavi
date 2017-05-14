@@ -80,7 +80,6 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             Log.d("MY_TAG",articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).userName.setText(articles.get(position - 1).getUser().getUserName());
             ((TopicsViewHolder) holder).content.setText(articles.get(position - 1).getArticleContent());
-            // todo：头像可以做个缓存
             Glide.with(context).load(articles.get(position-1).getUser().getUserImg())
                     .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(((TopicsViewHolder) holder).userPhoto);
@@ -111,11 +110,13 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
             }else {
                 ((TopicsViewHolder) holder).like.setImageDrawable(context.getDrawable(R.drawable.unlike));
             }
+            ((TopicsViewHolder) holder).numLike.setText(String.valueOf(articles.get(position - 1).getLikeNum()));
+            ((TopicsViewHolder) holder).numRepaly.setText(String.valueOf(articles.get(position - 1).getCommentNum()));
 
             ((TopicsViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onTopicClickListener.onlikeClicked(v,holder.getLayoutPosition());
+                    onTopicClickListener.onlikeClicked(((TopicsViewHolder) holder).numLike,v,holder.getLayoutPosition());
                 }
             });
             ((TopicsViewHolder) holder).comment.setOnClickListener(new View.OnClickListener() {
@@ -180,9 +181,13 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
         private ImageView comment;
         private RelativeLayout img_relative;
         private CardView cardView;
+        private TextView numRepaly;
+        private TextView numLike;
 
         public TopicsViewHolder(View itemView) {
             super(itemView);
+            numLike = (TextView) itemView.findViewById(R.id.num_like);
+            numRepaly = (TextView) itemView.findViewById(R.id.num_replay);
             cardView = (CardView) itemView.findViewById(R.id.item_view);
             img_relative = (RelativeLayout) itemView.findViewById(R.id.img_relative);
             userName = (TextView) itemView.findViewById(R.id.user_name);
@@ -227,7 +232,7 @@ public class RecycleTopicsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public interface onTopicClickListener{
-        void onlikeClicked(View view, int position);
+        void onlikeClicked(TextView like,View view, int position);
         void onCommentClicke();
         void onOthersPhotoClick();
     }

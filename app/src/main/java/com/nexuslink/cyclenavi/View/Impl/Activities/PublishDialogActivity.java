@@ -1,5 +1,6 @@
 package com.nexuslink.cyclenavi.View.Impl.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -25,12 +25,9 @@ import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.ArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
 import com.nexuslink.cyclenavi.R;
-import com.nexuslink.cyclenavi.Util.FreshEvent;
 import com.nexuslink.cyclenavi.Util.GlideImageLoader;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.Util.SpUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,23 +50,29 @@ public class PublishDialogActivity extends AppCompatActivity {
     private PhotosPrepareAdapter adpter;
     private RecyclerView recyclerPhotos;
     private ArrayList<ImageItem> images;
+    @BindView(R.id.publish_name_user)
+    TextView name;
 
     @BindView(R.id.publish_photo_user)
     CircleImageView circleImageView;
+    int i = -1;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_dialog);
         ButterKnife.bind(this);
-        Glide.with(this).load(SpUtil.getUserImage()).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(circleImageView);
+        Glide.with(this).load(SpUtil.getUserImage()).into(circleImageView);
+        name.setText(SpUtil.getUserName());
+        name.setText(SpUtil.getUserName());
 
         ImagePicker imagePicker = ImagePicker.getInstance();
         imagePicker.setImageLoader(new GlideImageLoader());   //设置图片加载器
         imagePicker.setShowCamera(false);  //显示拍照按钮
         imagePicker.setCrop(false);        //允许裁剪（单选才有效）
         imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-        imagePicker.setSelectLimit(9);    //选中数量限制
+        imagePicker.setSelectLimit(1);    //选中数量限制
         imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
         imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
 
@@ -104,10 +107,14 @@ public class PublishDialogActivity extends AppCompatActivity {
     private void upLoadImages(ArrayList<ImageItem> images, int articleId) {
 
         if(images != null ) {
-            Log.d("TAG_123",images.size() + images.get(0).path);
+            RequestBody aId =
+                    RequestBody.create(MediaType.parse("multipart/form-data"),articleId+"");
+
+            RequestBody uid =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(SpUtil.getUserId()));
             List<MultipartBody.Part> list = new ArrayList<>();
-           /* for (ImageItem image : images){*/
-                File fileold = new File(images.get(0).path);
+            for (ImageItem image : images){
+                File fileold = new File(image.path);
                 File file = new CompressHelper.Builder(this)
                         .setMaxWidth(720)  // 默认最大宽度为720
                         .setMaxHeight(960) // 默认最大高度为960
@@ -116,27 +123,27 @@ public class PublishDialogActivity extends AppCompatActivity {
                         .build()
                         .compressToFile(fileold);
 
-
-
                 RequestBody requestFile =
                         RequestBody.create(MediaType.parse("image/png"), file);
                 MultipartBody.Part img =
                         MultipartBody.Part.createFormData("articleImgs",file.getName(),requestFile);
                 list.add(img);
-          /*  }*/
+          }
+          upload(list,aId,uid);
+        }
+    }
 
-            RequestBody aId =
-                    RequestBody.create(MediaType.parse("multipart/form-data"),articleId+"");
+    //不支持多张图片，代码不改了。。。
+    private void upload(final List<MultipartBody.Part> parts, final RequestBody aId, final RequestBody uid) {
+        if(i < parts.size() - 1) {
+            i++;
 
-            RequestBody uid =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(SpUtil.getUserId()));
-
-
-            RetrofitWrapper.getInstance().create(ICycleNaviService.class).article(aId,uid,img).enqueue(new Callback<ArticleBean>() {
+            RetrofitWrapper.getInstance().create(ICycleNaviService.class).article(aId, uid, parts.get(i)).enqueue(new Callback<ArticleBean>() {
                 @Override
                 public void onResponse(Call<ArticleBean> call, Response<ArticleBean> response) {
-                    Log.d("TAG_123",response.code()+"");
-                    EventBus.getDefault().post(new FreshEvent("123"));
+                    /*ToastUtil.shortToast("上传一张");
+                    upload(parts, aId, uid);*/
+                    dialog.dismiss();
                     finish();
                 }
 
@@ -149,12 +156,12 @@ public class PublishDialogActivity extends AppCompatActivity {
     }
 
     private void upLoadText(TextView text) {
+        dialog = ProgressDialog.show(this, "提示", "图片上传中");
         Log.d("MY_TAG","上传前"+SpUtil.getUserId());
         RetrofitWrapper.getInstance().create(ICycleNaviService.class).publish(SpUtil.getUserId(),text.getText().toString()).enqueue(new Callback<PublishBean>() {
             @Override
             public void onResponse(Call<PublishBean> call, Response<PublishBean> response) {
                 upLoadImages(images,response.body().getArticleId());
-                finish();
             }
 
             @Override

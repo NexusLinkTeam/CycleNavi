@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Adapters.RecycleTopicsAdapter;
@@ -142,16 +143,25 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     @Override
-    public void onlikeClicked(View view,int position) {
+    public void onlikeClicked(TextView like, View view, int position) {
         // TODO: 2017/4/17 点赞的request
-        if(!presenter.checkIsLike()){
-            ImageView imageView = (ImageView) view;
+        ImageView imageView = (ImageView) view;
+        int count = Integer.parseInt(like.getText().toString());
+        FreshBean.ArticlesBean current = recyclerTopicsAdapter.getArticles().get(position - 1);
+        Boolean islike = recyclerTopicsAdapter.getArticles().get(position - 1).isLikeArticle();
+        if(!islike){
+            count ++;
+            like.setText(String.valueOf(count));
             imageView.setImageDrawable(getDrawable(R.drawable.like));
-            int articleId = recyclerTopicsAdapter.getArticles().get(position).getArticleId();
-            presenter.likeThis(SpUtil.getUserId(),articleId);
+            current.setLikeArticle(true);
         }else {
-            Toast.makeText(this,"已经赞过了呢",Toast.LENGTH_SHORT).show();
+            count--;
+            like.setText(String.valueOf(count));
+            imageView.setImageDrawable(getDrawable(R.drawable.unlike));
+            current.setLikeArticle(false);
         }
+        int articleId = recyclerTopicsAdapter.getArticles().get(position - 1).getArticleId();
+        presenter.likeThis(SpUtil.getUserId(),articleId);//赞与取消赞是同一个接口
     }
 
     @Override

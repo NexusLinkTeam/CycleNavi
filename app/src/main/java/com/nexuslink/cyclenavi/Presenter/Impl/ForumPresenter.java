@@ -59,7 +59,6 @@ public class ForumPresenter implements IForumPresenter {
 
     @Override
     public void likeSuccess() {
-        forumView.successToast("点赞成功");
     }
 
     @Override
