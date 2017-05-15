@@ -324,4 +324,9 @@ public class MainActivity extends AppCompatActivity
     public void shortCutOK(File file) {
         speedFragment.upload(file);
     }
+
+    @Override
+    public void reset() {
+        infoFragment.clear();
+    }
 }

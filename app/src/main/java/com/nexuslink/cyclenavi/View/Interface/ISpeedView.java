@@ -12,4 +12,6 @@ public interface ISpeedView extends BaseView<ISpeedPresenter> {
     void showFinish();
 
     void showStart();
+
+    void hideProgress();
 }

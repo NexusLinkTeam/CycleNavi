@@ -309,4 +309,9 @@ public class InfoFragment extends Fragment  implements LocationSource, AMapLocat
     public void onMapScreenShot(Bitmap bitmap, int i) {
 
     }
+
+    public void clear() {
+        tag = false;//停止绘制
+        aMap.clear(true);
+    }
 }

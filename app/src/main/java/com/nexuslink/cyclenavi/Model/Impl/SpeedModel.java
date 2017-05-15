@@ -4,6 +4,7 @@ import com.nexuslink.cyclenavi.Extra.Net.ApiService;
 import com.nexuslink.cyclenavi.Extra.Net.RetrofitClient;
 import com.nexuslink.cyclenavi.Model.Interface.ISpeedModel;
 import com.nexuslink.cyclenavi.Model.JavaBean.SaveRouteBean;
+import com.nexuslink.cyclenavi.Presenter.Interface.ISpeedPresenter;
 import com.nexuslink.cyclenavi.Util.ToastUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,6 +19,13 @@ import okhttp3.RequestBody;
  */
 
 public class SpeedModel implements ISpeedModel {
+
+    private ISpeedPresenter presenter;
+
+    public SpeedModel(ISpeedPresenter presenter) {
+        this.presenter = presenter;
+    }
+
     @Override
     // TODO: 2017/5/8 待测试
     //上传骑行路线
@@ -36,6 +44,7 @@ public class SpeedModel implements ISpeedModel {
                     @Override
                     public void accept(@NonNull SaveRouteBean saveRouteBean) throws Exception {
                         ToastUtil.shortToast("上传行车记录");
+                        presenter.responseSuccess();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

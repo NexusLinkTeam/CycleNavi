@@ -20,4 +20,6 @@ public interface IFragCommunicate {
     String getTotalTime();
 
     void shortCutOK(File file);
+
+    void reset();
 }

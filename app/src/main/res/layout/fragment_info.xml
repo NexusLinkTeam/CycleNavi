@@ -83,44 +83,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp">
-                        <ImageView
-                            android:layout_marginLeft="16dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/way"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp" />
-                        <TextView
-                            android:textStyle="bold"
-                            android:textSize="22sp"
-                            android:text="骑行了605Km"
-                            android:layout_marginLeft="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp">
-                        <ImageView
-                            android:layout_marginLeft="16dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/kcal"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp" />
-                        <TextView
-                            android:textStyle="bold"
-                            android:textSize="22sp"
-                            android:text="大约消耗1000Ka热量"
-                            android:layout_marginLeft="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

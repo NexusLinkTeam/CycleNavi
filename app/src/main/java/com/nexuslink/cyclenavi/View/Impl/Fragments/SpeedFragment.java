@@ -1,8 +1,12 @@
 package com.nexuslink.cyclenavi.View.Impl.Fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -42,6 +46,8 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     private ISpeedPresenter presenter;
     private IFragCommunicate call;
 
+    private ProgressDialog progressDialog;
+
     @BindView(R.id.panView)
     DashboardView panView;//仪表盘
     @BindView(R.id.play)
@@ -61,7 +67,27 @@ public class SpeedFragment extends Fragment implements ISpeedView {
     //pause 等于 finish
     @OnClick(R.id.finish) void pause(){
         //去截屏
-        call.getShortCut();
+        textTimer.stop();
+        new AlertDialog.Builder(getContext())
+                .setTitle("提示")
+                .setMessage("希望保存此次骑行记录吗？")
+                .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        progressDialog = ProgressDialog
+                                .show(getContext(),"提示","上传用户数据中");
+                        progressDialog.setCancelable(true);
+                        call.getShortCut();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        textTimer.start();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -106,6 +132,16 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         call.startDrawAndCalculate();
         startVisible(true);
         timeStart();
+    }
+
+    @Override
+    public void hideProgress() {
+        if(progressDialog != null){
+            progressDialog.dismiss();
+            startVisible(false);
+            textTimer.setBase(SystemClock.elapsedRealtime());
+            call.reset();
+        }
     }
 
     /**
@@ -172,4 +208,6 @@ public class SpeedFragment extends Fragment implements ISpeedView {
         MultipartBody.Part pic = MultipartBody.Part.createFormData("picture",file.getName(),requestFile);
         presenter.pauseCycle(userIdBody,totalTimeBody,dateBody,routLineBody,speedsBody,heightsBody,pic);
     }
+
+
 }

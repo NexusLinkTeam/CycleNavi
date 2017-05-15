@@ -18,4 +18,6 @@ public interface ISpeedPresenter {
                     RequestBody speedList,
                     RequestBody heightList,
                     MultipartBody.Part picture);
+
+    void responseSuccess();
 }

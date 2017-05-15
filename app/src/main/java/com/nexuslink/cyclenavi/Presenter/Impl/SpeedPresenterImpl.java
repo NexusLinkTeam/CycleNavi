@@ -18,7 +18,7 @@ public class SpeedPresenterImpl implements ISpeedPresenter {
     public SpeedPresenterImpl(ISpeedView speedView) {
         this.speedView = speedView;
         speedView.setPresenter(this);
-        speedModel = new SpeedModel();
+        speedModel = new SpeedModel(this);
     }
     //开始骑行时
     @Override
@@ -37,5 +37,10 @@ public class SpeedPresenterImpl implements ISpeedPresenter {
                            MultipartBody.Part picture) {
         speedModel.uploadCurrent(userId, totalTime, date, routeLine, speedList, heightList, picture);
         speedView.showFinish();
+    }
+
+    @Override
+    public void responseSuccess() {
+        speedView.hideProgress();
     }
 }
