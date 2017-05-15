@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,21 +26,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfo;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
+import com.nexuslink.cyclenavi.Util.SpUtils;
 
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity{
 
-
+    private String TAG ="LoginActivity.class";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -221,10 +229,8 @@ public class LoginActivity extends AppCompatActivity{
                                     putBoolean("isUserLogin",true).
                                     putString("name",mEmail).
                                     putString("uid", String.valueOf(response.body().getUid())).apply();
-                            mAuthTask = null;
-                            showProgress(false);
-                            setResult(RESULT_OK);
-                            finish();
+                            SpUtils.putInt(LoginActivity.this,"uid",response.body().getUid());
+                            InputUserInfo();
                         }else {
                             SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
                             sharedPreferences.edit().putBoolean("isUserLogin",false).apply();
@@ -233,9 +239,7 @@ public class LoginActivity extends AppCompatActivity{
                             mPasswordView.setError(getString(R.string.error_incorrect_password));
                             mPasswordView.requestFocus();
                         }
-
                     }
-
                     @Override
                     public void onFailure(Call<LoginBean> call, Throwable t) {
                         Toast.makeText(LoginActivity.this,"登录失败2",Toast.LENGTH_SHORT).show();
@@ -254,6 +258,42 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    private void InputUserInfo()
+    {
+        final SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
+        RetrofitWrapper.getInstance().create(ICycleNaviService.class)
+                .getUserInfo(SpUtils.getInt(LoginActivity.this,"uid")).subscribeOn(Schedulers.io())
+                .map(new Func1<GetUserInfo, String>() {
+                    @Override
+                    public String call(GetUserInfo getUserInfo) {
+                        String emergencyCall = getUserInfo.getUser().getUserEmergencyPhone();
+                        String userId = Integer.toString(getUserInfo.getUser().getUserId());
+                        Log.e("LoginActivity.class",userId);
+                        return emergencyCall;
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                mAuthTask = null;
+                showProgress(false);
+                setResult(RESULT_OK);
+                finish();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(LoginActivity.this,"紧急电话录入失败，请手动录入," + sharedPreferences.getString("uid",""),Toast.LENGTH_LONG).show();
+                mAuthTask = null;
+                showProgress(false);
+                setResult(RESULT_OK);
+                finish();
+            }
+            @Override
+            public void onNext(String s) {
+                SpUtils.putString(LoginActivity.this,"EmergencyCall",s);
+                SpUtils.putString(LoginActivity.this,"EmergencyContent","我遇到危险了，请帮助我！");
+            }
+        });
     }
 }
 

@@ -5,8 +5,11 @@ import com.nexuslink.cyclenavi.Model.JavaBean.CommentBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetArticleBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetCommentsBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetHisMore;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreComments;
 import com.nexuslink.cyclenavi.Model.JavaBean.GetMoreHitsBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetRouteList;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfo;
 import com.nexuslink.cyclenavi.Model.JavaBean.HitsBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LikeBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
@@ -15,6 +18,7 @@ import com.nexuslink.cyclenavi.Model.JavaBean.PublishBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.RegisterBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.SaveNameBean;
 import com.nexuslink.cyclenavi.Model.JavaBean.UpLoadBean;
+import com.nexuslink.cyclenavi.Model.JavaBean.UpdateEPhone;
 
 import java.util.List;
 
@@ -26,6 +30,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import rx.Observable;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * 后台提供的接口
@@ -43,6 +50,18 @@ public interface ICycleNaviService {
     Call<LoginBean> login(@Field("userName")String userName,
                           @Field("userPassword")String userPassWord);
 
+    @FormUrlEncoded
+    @POST("/cycle/api/user/getUser")
+    rx.Observable<GetUserInfo> getUserInfo (@Field("uid") int uid);
+
+    @FormUrlEncoded
+    @POST("/user/updateEmergencyPhone")
+    Observable<UpdateEPhone> changeEPhone (@Field("uid") int uid, @Field("userEmergencyPhone") String userEmergencyPhone);
+
+    @FormUrlEncoded
+    @POST("/cycle/api/user/getRouteList")
+    Observable<GetRouteList> getRoutes(@Field("userId")int userId);
+
     @Multipart
     @POST("/cycle/api/img/changeUser")
     Call<UpLoadBean> upLoad(@Part("uid")RequestBody uid,
@@ -56,7 +75,6 @@ public interface ICycleNaviService {
     @POST("/cycle/api/article/publish")
     Call<PublishBean> publish(@Field("userId") String userId,
                               @Field("content") String content);
-
     @Multipart
     @POST("/cycle/api/img/article")
     Call<ArticleBean> article(@Part("articleId") RequestBody articleId,
@@ -83,6 +101,18 @@ public interface ICycleNaviService {
                           @Field("writerId") String writerId);
 
     @FormUrlEncoded
+    @POST("/cycle/api/article/getHis")
+    Observable<HitsBean> getOnesArticle(@Field("userId") int userId,
+                                        @Field("writerId") int writerId);
+
+
+    @FormUrlEncoded
+    @POST("/cycle/api/article/getHisMore")
+    Observable<HitsBean> getOnesMore(@Field("userId") int userId,
+                                       @Field("writerId") int writerId,
+                                       @Field("lastArticleId") int lastArticleId );
+
+    @FormUrlEncoded
     @POST("/cycle/api/article/getHisMore")
     Call<GetMoreHitsBean> getHisMore(@Field("userId") String userId,
                                      @Field("writerId") String writerId,
@@ -107,4 +137,5 @@ public interface ICycleNaviService {
     @POST("/cycle/api/article/getMoreComments")
     Call<GetMoreComments> getMoreComments (@Field("userId") String userId,
                                            @Field("lastCommentFloor") String lastCommentFloor  );
+
 }

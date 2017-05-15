@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.stetho.inspector.protocol.module.Runtime;
 import com.nexuslink.cyclenavi.Adapters.RecycleTopicsAdapter;
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
 import com.nexuslink.cyclenavi.Model.JavaBean.FreshBean;
@@ -99,7 +100,6 @@ public class ForumActivity extends AppCompatActivity implements SwipeRefreshLayo
                     Toast.makeText(ForumActivity.this,"请求失败",Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<FreshBean> call, Throwable t) {
 

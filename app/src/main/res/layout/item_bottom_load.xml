@@ -12,8 +12,8 @@
         <ProgressBar
             android:id="@+id/btom_load"
             android:layout_margin="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
         <TextView
             android:id="@+id/btom_text"
             android:layout_margin="8dp"
