@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,21 +24,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nexuslink.cyclenavi.Api.ICycleNaviService;
+import com.nexuslink.cyclenavi.Model.JavaBean.GetUserInfo;
 import com.nexuslink.cyclenavi.Model.JavaBean.LoginBean;
 import com.nexuslink.cyclenavi.R;
 import com.nexuslink.cyclenavi.Util.RetrofitWrapper;
 import com.nexuslink.cyclenavi.Util.SpUtil;
+import com.nexuslink.cyclenavi.Util.SpUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity{
 
-
+    private String TAG ="LoginActivity.class";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -70,7 +78,6 @@ public class LoginActivity extends AppCompatActivity{
                 return false;
             }
         });
-
         CardView mSignInButton = (CardView) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -164,7 +171,6 @@ public class LoginActivity extends AppCompatActivity{
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
@@ -208,41 +214,46 @@ public class LoginActivity extends AppCompatActivity{
             // TODO: attempt authentication against a network service.
             //真正的网络请求部分
 
-                RetrofitWrapper.getInstance().create(ICycleNaviService.class).login(
-                        mEmail,mPassword).enqueue(new Callback<LoginBean>() {
-                    @Override
-                    public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                        if(response.body().getCode() == 200){
-                            SpUtil.setLoginStatus(LoginActivity.this,true);
-                            SpUtil.setUserName(LoginActivity.this,mEmail);
-                            SpUtil.setUserId(LoginActivity.this,response.body().getUid());
-                            mAuthTask = null;
-                            showProgress(false);
-                            setResult(RESULT_OK);
-                            finish();
-                        }else {
-                            SpUtil.setLoginStatus(LoginActivity.this,false);
-                            SpUtil.setUserName(LoginActivity.this,"name");
-                            SpUtil.setUserId(LoginActivity.this,-1);
-                            mAuthTask = null;
-                            showProgress(false);
-                            mPasswordView.setError(getString(R.string.error_incorrect_password));
-                            mPasswordView.requestFocus();
-                        }
-
+            RetrofitWrapper.getInstance().create(ICycleNaviService.class).login(
+                    mEmail,mPassword).enqueue(new Callback<LoginBean>() {
+                @Override
+                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                    if(response.body().getCode() == 200){
+                        SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
+                        sharedPreferences.edit().
+                                putBoolean("isUserLogin",true).
+                                putString("name",mEmail).
+                                putString("uid", String.valueOf(response.body().getUid())).apply();
+                        SpUtils.putInt(LoginActivity.this,"uid",response.body().getUid());
+                        InputUserInfo();
+                        SpUtil.setLoginStatus(LoginActivity.this,true);
+                        SpUtil.setUserName(LoginActivity.this,mEmail);
+                        SpUtil.setUserId(LoginActivity.this,response.body().getUid());
+                        mAuthTask = null;
+                        showProgress(false);
+                        setResult(RESULT_OK);
+                        finish();
+                    }else {
+                        SpUtil.setLoginStatus(LoginActivity.this,false);
+                        SpUtil.setUserName(LoginActivity.this,"name");
+                        SpUtil.setUserId(LoginActivity.this,-1);
+                        mAuthTask = null;
+                        showProgress(false);
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
                     }
-
-                    @Override
-                    public void onFailure(Call<LoginBean> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this,"登录失败2",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
+                @Override
+                public void onFailure(Call<LoginBean> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this,"登录失败2",Toast.LENGTH_SHORT).show();
+                }
+            });
             return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-           //已在onResponse()处理
+            //已在onResponse()处理
         }
 
         @Override
@@ -250,6 +261,42 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    private void InputUserInfo()
+    {
+        final SharedPreferences sharedPreferences = getSharedPreferences("CycleNaviData",MODE_PRIVATE);
+        RetrofitWrapper.getInstance().create(ICycleNaviService.class)
+                .getUserInfo(SpUtils.getInt(LoginActivity.this,"uid")).subscribeOn(Schedulers.io())
+                .map(new Func1<GetUserInfo, String>() {
+                    @Override
+                    public String call(GetUserInfo getUserInfo) {
+                        String emergencyCall = getUserInfo.getUser().getUserEmergencyPhone();
+                        String userId = Integer.toString(getUserInfo.getUser().getUserId());
+                        Log.e("LoginActivity.class",userId);
+                        return emergencyCall;
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                mAuthTask = null;
+                showProgress(false);
+                setResult(RESULT_OK);
+                finish();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(LoginActivity.this,"紧急电话录入失败，请手动录入," + sharedPreferences.getString("uid",""),Toast.LENGTH_LONG).show();
+                mAuthTask = null;
+                showProgress(false);
+                setResult(RESULT_OK);
+                finish();
+            }
+            @Override
+            public void onNext(String s) {
+                SpUtils.putString(LoginActivity.this,"EmergencyCall",s);
+                SpUtils.putString(LoginActivity.this,"EmergencyContent","我遇到危险了，请帮助我！");
+            }
+        });
     }
 }
 
